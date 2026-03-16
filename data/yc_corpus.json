@@ -1,0 +1,32 @@
+[
+    {
+        "doc_id": "1556dd18-9eda-4d8e-969e-11a55eebabca",
+        "source_url": "https://www.ycombinator.com/companies/scale-ai",
+        "publisher": "Y Combinator",
+        "author": null,
+        "published_date": "2026-03-03T19:18:01.239301",
+        "crawl_time": "2026-03-03T19:18:01.239321",
+        "raw_text": "Startup Name: Scale AI. YC Profile: \u00a92026Y Combinator",
+        "cleaned_text": "Startup Name: Scale AI. YC Profile: \u00a92026Y Combinator"
+    },
+    {
+        "doc_id": "6e2f66ba-0079-4280-8142-71eaa2eb5dc8",
+        "source_url": "https://www.ycombinator.com/companies/assemblyai",
+        "publisher": "Y Combinator",
+        "author": null,
+        "published_date": "2026-03-03T19:18:03.542457",
+        "crawl_time": "2026-03-03T19:18:03.542466",
+        "raw_text": "Startup Name: AssemblyAI. YC Profile: \u00a92026Y Combinator",
+        "cleaned_text": "Startup Name: AssemblyAI. YC Profile: \u00a92026Y Combinator"
+    },
+    {
+        "doc_id": "b2064e3a-e19d-49ec-b308-df091efc2fe9",
+        "source_url": "https://www.ycombinator.com/companies/replit",
+        "publisher": "Y Combinator",
+        "author": null,
+        "published_date": "2026-03-03T19:18:05.857598",
+        "crawl_time": "2026-03-03T19:18:05.857610",
+        "raw_text": "Startup Name: Replit. YC Profile: \u00a92026Y Combinator",
+        "cleaned_text": "Startup Name: Replit. YC Profile: \u00a92026Y Combinator"
+    }
+]

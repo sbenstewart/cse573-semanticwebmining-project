@@ -1,0 +1,1149 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #111111;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 800px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="Accenture">Accenture</option>
+                                
+                                    <option value="Ookla">Ookla</option>
+                                
+                                    <option value="Faculty">Faculty</option>
+                                
+                                    <option value="Scale">Scale</option>
+                                
+                                    <option value="Dan Tadross">Dan Tadross</option>
+                                
+                                    <option value="Scale Ai">Scale Ai</option>
+                                
+                                    <option value="Meritalk">Meritalk</option>
+                                
+                                    <option value="Meta">Meta</option>
+                                
+                                    <option value="Smaller Startup">Smaller Startup</option>
+                                
+                                    <option value="This A.I. Startup">This A.I. Startup</option>
+                                
+                                    <option value="Wang">Wang</option>
+                                
+                                    <option value="Frontier Tech Consultant">Frontier Tech Consultant</option>
+                                
+                                    <option value="Operations Associate">Operations Associate</option>
+                                
+                                    <option value="Genai">Genai</option>
+                                
+                                    <option value="Distinguished Engineer">Distinguished Engineer</option>
+                                
+                                    <option value="Engineering Manager">Engineering Manager</option>
+                                
+                                    <option value="Head International Public Sector">Head International Public Sector</option>
+                                
+                                    <option value="Enterprise Account Executive">Enterprise Account Executive</option>
+                                
+                                    <option value="Fortune 500">Fortune 500</option>
+                                
+                                    <option value="Growth Strategy & Operations Manager">Growth Strategy & Operations Manager</option>
+                                
+                                    <option value="Gtm Architect">Gtm Architect</option>
+                                
+                                    <option value="Cisco">Cisco</option>
+                                
+                                    <option value="Dla Piper">Dla Piper</option>
+                                
+                                    <option value="Mayo Clinic">Mayo Clinic</option>
+                                
+                                    <option value="Time Inc.">Time Inc.</option>
+                                
+                                    <option value="Government Agencies">Government Agencies</option>
+                                
+                                    <option value="Mission Software Engineer">Mission Software Engineer</option>
+                                
+                                    <option value="Principal Architect">Principal Architect</option>
+                                
+                                    <option value="Revenue Operations Manager">Revenue Operations Manager</option>
+                                
+                                    <option value="General Counsel">General Counsel</option>
+                                
+                                    <option value="Time">Time</option>
+                                
+                                    <option value="Genai Engineering Organization">Genai Engineering Organization</option>
+                                
+                                    <option value="Genai Engineering">Genai Engineering</option>
+                                
+                                    <option value="Staff Software Engineer">Staff Software Engineer</option>
+                                
+                                    <option value="Costello">Costello</option>
+                                
+                                    <option value="Cisa">Cisa</option>
+                                
+                                    <option value="At&T">At&T</option>
+                                
+                                    <option value="Aws">Aws</option>
+                                
+                                    <option value="Mistral Ai">Mistral Ai</option>
+                                
+                                    <option value="Finance">Finance</option>
+                                
+                                    <option value="Infosys">Infosys</option>
+                                
+                                    <option value="Intel">Intel</option>
+                                
+                                    <option value="Capgemini">Capgemini</option>
+                                
+                                    <option value="Openai">Openai</option>
+                                
+                                    <option value="Frontier Alliances">Frontier Alliances</option>
+                                
+                                    <option value="Enterprise">Enterprise</option>
+                                
+                                    <option value="Mckinsey">Mckinsey</option>
+                                
+                                    <option value="Replit">Replit</option>
+                                
+                                    <option value="Nvidia">Nvidia</option>
+                                
+                                    <option value="Lumentum">Lumentum</option>
+                                
+                                    <option value="Photonics">Photonics</option>
+                                
+                                    <option value="Ai">Ai</option>
+                                
+                                    <option value="Software-Defined Ai-Ran">Software-Defined Ai-Ran</option>
+                                
+                                    <option value="Coherent">Coherent</option>
+                                
+                                    <option value="L&T">L&T</option>
+                                
+                                    <option value="Ai Engineering Org">Ai Engineering Org</option>
+                                
+                                    <option value="Scale'S International Public Sector (Ips)">Scale'S International Public Sector (Ips)</option>
+                                
+                                    <option value="Digitalocean">Digitalocean</option>
+                                
+                                    <option value="Workato">Workato</option>
+                                
+                                    <option value="Sk Telecom">Sk Telecom</option>
+                                
+                                    <option value="Panmnesia">Panmnesia</option>
+                                
+                                    <option value="Skt">Skt</option>
+                                
+                                    <option value="Palo Alto Networks">Palo Alto Networks</option>
+                                
+                                    <option value="Global Telecom Partners">Global Telecom Partners</option>
+                                
+                                    <option value="Rise8">Rise8</option>
+                                
+                                    <option value="Thoughtworks">Thoughtworks</option>
+                                
+                                    <option value="Ambient Scribe Ai">Ambient Scribe Ai</option>
+                                
+                                    <option value="Minio">Minio</option>
+                                
+                                    <option value="Databricks">Databricks</option>
+                                
+                                    <option value="Google">Google</option>
+                                
+                                    <option value="Claude">Claude</option>
+                                
+                                    <option value="Cursor">Cursor</option>
+                                
+                                    <option value="Latent Ai">Latent Ai</option>
+                                
+                                    <option value="Aum Ventures">Aum Ventures</option>
+                                
+                                    <option value="Cio">Cio</option>
+                                
+                                    <option value="Datadriveninvestor">Datadriveninvestor</option>
+                                
+                                    <option value="Vercel">Vercel</option>
+                                
+                                    <option value="Llms">Llms</option>
+                                
+                                    <option value="Pluralsight">Pluralsight</option>
+                                
+                                    <option value="Ai Academy">Ai Academy</option>
+                                
+                                    <option value="Skift">Skift</option>
+                                
+                                    <option value="The Ai Architects Of Travel">The Ai Architects Of Travel</option>
+                                
+                                    <option value="Rely">Rely</option>
+                                
+                                    <option value="New Leadership">New Leadership</option>
+                                
+                                    <option value="Beinsure">Beinsure</option>
+                                
+                                    <option value="Ericsson">Ericsson</option>
+                                
+                                    <option value="Ericsson Ceo">Ericsson Ceo</option>
+                                
+                                    <option value="Safra">Safra</option>
+                                
+                                    <option value="Saxo">Saxo</option>
+                                
+                                    <option value="Subcontractorhub">Subcontractorhub</option>
+                                
+                                    <option value="Curve Partners">Curve Partners</option>
+                                
+                                    <option value="Director Of Applied Ai">Director Of Applied Ai</option>
+                                
+                                    <option value="Governor Bob Ferguson">Governor Bob Ferguson</option>
+                                
+                                    <option value="Democrats">Democrats</option>
+                                
+                                    <option value="Credo">Credo</option>
+                                
+                                    <option value="Tensorwave">Tensorwave</option>
+                                
+                                    <option value="Amd">Amd</option>
+                                
+                                    <option value="Red Hat">Red Hat</option>
+                                
+                                    <option value="Telenor Ai Factory">Telenor Ai Factory</option>
+                                
+                                    <option value="Turiyam Ai">Turiyam Ai</option>
+                                
+                                    <option value="Ntt Gdc">Ntt Gdc</option>
+                                
+                                    <option value="Ntt Global Data Centers">Ntt Global Data Centers</option>
+                                
+                                    <option value="Mirantis">Mirantis</option>
+                                
+                                    <option value="Supermicro">Supermicro</option>
+                                
+                                    <option value="Mark Zuckerberg">Mark Zuckerberg</option>
+                                
+                                    <option value="Facebook">Facebook</option>
+                                
+                                    <option value="Co-Founder">Co-Founder</option>
+                                
+                                    <option value="Ai Startup">Ai Startup</option>
+                                
+                                    <option value="$29 Billion Ai Startup">$29 Billion Ai Startup</option>
+                                
+                                    <option value="Assemblyai">Assemblyai</option>
+                                
+                                    <option value="Superhuman Speech Recognition">Superhuman Speech Recognition</option>
+                                
+                                    <option value="Accel">Accel</option>
+                                
+                                    <option value="Insight Partners">Insight Partners</option>
+                                
+                                    <option value="Y Combinator'S Ai Fund">Y Combinator'S Ai Fund</option>
+                                
+                                    <option value="Patrick And John Collison">Patrick And John Collison</option>
+                                
+                                    <option value="Nat Friedman">Nat Friedman</option>
+                                
+                                    <option value="Daniel Gross">Daniel Gross</option>
+                                
+                                    <option value="Generative Ai">Generative Ai</option>
+                                
+                                    <option value="Business Insider">Business Insider</option>
+                                
+                                    <option value="I">I</option>
+                                
+                                    <option value="Anthropic">Anthropic</option>
+                                
+                                    <option value="Higgsfield Ai">Higgsfield Ai</option>
+                                
+                                    <option value="Mike Krieger">Mike Krieger</option>
+                                
+                                    <option value="Hexaware">Hexaware</option>
+                                
+                                    <option value="Microsoft">Microsoft</option>
+                                
+                                    <option value="Government Of Jordan">Government Of Jordan</option>
+                                
+                                    <option value="Ai Video Tool">Ai Video Tool</option>
+                                
+                                    <option value="Tipranks">Tipranks</option>
+                                
+                                    <option value="The Ceo Of Replit">The Ceo Of Replit</option>
+                                
+                                    <option value="Ceo">Ceo</option>
+                                
+                                    <option value="Razorpay">Razorpay</option>
+                                
+                                    <option value="Campus">Campus</option>
+                                
+                                    <option value="Ai-Driven Video">Ai-Driven Video</option>
+                                
+                                    <option value="Animation">Animation</option>
+                                
+                                    <option value="Snowflake">Snowflake</option>
+                                
+                                    <option value="Saastr">Saastr</option>
+                                
+                                    <option value="Amjad Masad">Amjad Masad</option>
+                                
+                                    <option value="Sequoia Capital">Sequoia Capital</option>
+                                
+                                    <option value="Humain">Humain</option>
+                                
+                                    <option value="Wilson Sonsini">Wilson Sonsini</option>
+                                
+                                    <option value="Humain One">Humain One</option>
+                                
+                                    <option value="Google Cloud">Google Cloud</option>
+                                
+                                    <option value="Startengine">Startengine</option>
+                                
+                                    <option value="Y Combinator">Y Combinator</option>
+                                
+                                    <option value="Augment Code">Augment Code</option>
+                                
+                                    <option value="Company">Company</option>
+                                
+                                    <option value="Sf Tech Ceo">Sf Tech Ceo</option>
+                                
+                                    <option value="Replit Ceo">Replit Ceo</option>
+                                
+                                    <option value="Jason Lemkin">Jason Lemkin</option>
+                                
+                                    <option value="The Economy">The Economy</option>
+                                
+                                    <option value="Cvai">Cvai</option>
+                                
+                                    <option value="Ey">Ey</option>
+                                
+                                    <option value="Groq">Groq</option>
+                                
+                                    <option value="Xr">Xr</option>
+                                
+                                    <option value="Viture">Viture</option>
+                                
+                                    <option value="Mojo Vision">Mojo Vision</option>
+                                
+                                    <option value="Replit Agent">Replit Agent</option>
+                                
+                                    <option value="Jimmy Ba">Jimmy Ba</option>
+                                
+                                    <option value="Ai Infrastructure Engineer">Ai Infrastructure Engineer</option>
+                                
+                                    <option value="Ai Product Manager">Ai Product Manager</option>
+                                
+                                    <option value="Machine Learning">Machine Learning</option>
+                                
+                                    <option value="Self-Driving Cars">Self-Driving Cars</option>
+                                
+                                    <option value="Enterprise Genai">Enterprise Genai</option>
+                                
+                                    <option value="International Public Sector">International Public Sector</option>
+                                
+                                    <option value="Machine Learning (Ml)">Machine Learning (Ml)</option>
+                                
+                                    <option value="Autonomous Vehicles">Autonomous Vehicles</option>
+                                
+                                    <option value="Business Operations & Strategy Manager">Business Operations & Strategy Manager</option>
+                                
+                                    <option value="Fox">Fox</option>
+                                
+                                    <option value="Cohere">Cohere</option>
+                                
+                                    <option value="Director Of Business Systems">Director Of Business Systems</option>
+                                
+                                    <option value="Director, Strategic Finance">Director, Strategic Finance</option>
+                                
+                                    <option value="Director Of Governance & Risk Compliance">Director Of Governance & Risk Compliance</option>
+                                
+                                    <option value="Government Entities">Government Entities</option>
+                                
+                                    <option value="Research Institutions">Research Institutions</option>
+                                
+                                    <option value="Engineering Manager, Security">Engineering Manager, Security</option>
+                                
+                                    <option value="Public Sector">Public Sector</option>
+                                
+                                    <option value="Gtm Lead, National Security & Intelligence">Gtm Lead, National Security & Intelligence</option>
+                                
+                                    <option value="Gtm Strategic Finance Manager">Gtm Strategic Finance Manager</option>
+                                
+                                    <option value="Head Of It Support">Head Of It Support</option>
+                                
+                                    <option value="Human Frontier Collective (Hfc)">Human Frontier Collective (Hfc)</option>
+                                
+                                    <option value="Agent Data Foundation">Agent Data Foundation</option>
+                                
+                                    <option value="Government Of Qatar">Government Of Qatar</option>
+                                
+                                    <option value="U.S. Government Agencies Including The Army And Air Force">U.S. Government Agencies Including The Army And Air Force</option>
+                                
+                                    <option value="National Security & Technology Strategy Fellow">National Security & Technology Strategy Fellow</option>
+                                
+                                    <option value="Job Title: Program Manager, Sales Enablement">Job Title: Program Manager, Sales Enablement</option>
+                                
+                                    <option value="Robotics Engineer">Robotics Engineer</option>
+                                
+                                    <option value="Senior Machine Learning Engineer - Model Evaluations, Public Sector">Senior Machine Learning Engineer - Model Evaluations, Public Sector</option>
+                                
+                                    <option value="Frontier Data">Frontier Data</option>
+                                
+                                    <option value="Senior Software Engineer, Platform — Connectivity">Senior Software Engineer, Platform — Connectivity</option>
+                                
+                                    <option value="Software Engineer">Software Engineer</option>
+                                
+                                    <option value="Generative Models">Generative Models</option>
+                                
+                                    <option value="Rlhf">Rlhf</option>
+                                
+                                    <option value="Strategic Finance Manager">Strategic Finance Manager</option>
+                                
+                                    <option value="U.S. Army">U.S. Army</option>
+                                
+                                    <option value="U.S. Air Force">U.S. Air Force</option>
+                                
+                                    <option value="Ml Infrastructure Team">Ml Infrastructure Team</option>
+                                
+                                    <option value="Platform">Platform</option>
+                                
+                                    <option value="Hireart">Hireart</option>
+                                
+                                    <option value="Scale'S Robotics Business">Scale'S Robotics Business</option>
+                                
+                                    <option value="John Doe">John Doe</option>
+                                
+                                    <option value="Deal Desk & Pricing Manager">Deal Desk & Pricing Manager</option>
+                                
+                                    <option value="Sales Operations & Strategy Team">Sales Operations & Strategy Team</option>
+                                
+                                    <option value="Sales And Finance Leadership">Sales And Finance Leadership</option>
+                                
+                                    <option value="Agentic Frameworks">Agentic Frameworks</option>
+                                
+                                    <option value="Generative Ai Expertise And Infrastructure">Generative Ai Expertise And Infrastructure</option>
+                                
+                                    <option value="Scale Generativeai Platform (Sgp)">Scale Generativeai Platform (Sgp)</option>
+                                
+                                    <option value="Director Of Enterprise Gtm">Director Of Enterprise Gtm</option>
+                                
+                                    <option value="Executive Assistant">Executive Assistant</option>
+                                
+                                    <option value="Cfo">Cfo</option>
+                                
+                                    <option value="Data">Data</option>
+                                
+                                    <option value="Technology And Systems">Technology And Systems</option>
+                                
+                                    <option value="Finance Fellow - Human Frontier Collective (Us)">Finance Fellow - Human Frontier Collective (Us)</option>
+                                
+                                    <option value="Finance Fellow - Human Frontier Collective (Uk)">Finance Fellow - Human Frontier Collective (Uk)</option>
+                                
+                                    <option value="Medical Fellow - Human Frontier Collective (Uk)">Medical Fellow - Human Frontier Collective (Uk)</option>
+                                
+                                    <option value="Ai Labs And Platforms">Ai Labs And Platforms</option>
+                                
+                                    <option value="Scale'S Research Team">Scale'S Research Team</option>
+                                
+                                    <option value="Public Sector Gtm Team">Public Sector Gtm Team</option>
+                                
+                                    <option value="Head Of Strategic Partnerships">Head Of Strategic Partnerships</option>
+                                
+                                    <option value="Vp Of Sales, Enterprise">Vp Of Sales, Enterprise</option>
+                                
+                                    <option value="Head Of Enterprise Gtm">Head Of Enterprise Gtm</option>
+                                
+                                    <option value="Human Frontier Collective">Human Frontier Collective</option>
+                                
+                                    <option value="Medical Fellow - Human Frontier Collective (Us)">Medical Fellow - Human Frontier Collective (Us)</option>
+                                
+                                    <option value="Scale'S Robotics Business Unit">Scale'S Robotics Business Unit</option>
+                                
+                                    <option value="Technical Program Manager">Technical Program Manager</option>
+                                
+                                    <option value="Government Customers">Government Customers</option>
+                                
+                                    <option value="Operations & Strategy Manager, Public Sector">Operations & Strategy Manager, Public Sector</option>
+                                
+                                    <option value="Head Of Business Operations (Bizops), Public Sector">Head Of Business Operations (Bizops), Public Sector</option>
+                                
+                                    <option value="Partnerships Lead">Partnerships Lead</option>
+                                
+                                    <option value="Head Of Public Sector Gtm">Head Of Public Sector Gtm</option>
+                                
+                                    <option value="Global Systems Integrators (Gsis)">Global Systems Integrators (Gsis)</option>
+                                
+                                    <option value="Defense Primes">Defense Primes</option>
+                                
+                                    <option value="Program Manager">Program Manager</option>
+                                
+                                    <option value="Scale'S Public Sector Business">Scale'S Public Sector Business</option>
+                                
+                                    <option value="Sales Enablement Team">Sales Enablement Team</option>
+                                
+                                    <option value="Robotics Operations Manager">Robotics Operations Manager</option>
+                                
+                                    <option value="Operations Supervisors">Operations Supervisors</option>
+                                
+                                    <option value="Robotics Technicians">Robotics Technicians</option>
+                                
+                                    <option value="Data Collection Associates">Data Collection Associates</option>
+                                
+                                    <option value="Security Engineer">Security Engineer</option>
+                                
+                                    <option value="Product Security Team">Product Security Team</option>
+                                
+                                    <option value="Scale Gp">Scale Gp</option>
+                                
+                                    <option value="React">React</option>
+                                
+                                    <option value="Typescript">Typescript</option>
+                                
+                                    <option value="Python">Python</option>
+                                
+                                    <option value="Vector Databases">Vector Databases</option>
+                                
+                                    <option value="Embeddings">Embeddings</option>
+                                
+                                    <option value="Sql">Sql</option>
+                                
+                                    <option value="Kubernetes">Kubernetes</option>
+                                
+                                    <option value="Containerization">Containerization</option>
+                                
+                                    <option value="Microservice Architectures">Microservice Architectures</option>
+                                
+                                    <option value="Staff Infrastructure Software Engineer">Staff Infrastructure Software Engineer</option>
+                                
+                                    <option value="Terraform">Terraform</option>
+                                
+                                    <option value="Enterprise Ai">Enterprise Ai</option>
+                                
+                                    <option value="Data Platform">Data Platform</option>
+                                
+                                    <option value="Docker">Docker</option>
+                                
+                                    <option value="Nodejs">Nodejs</option>
+                                
+                                    <option value="Nextjs">Nextjs</option>
+                                
+                                    <option value="Bazel">Bazel</option>
+                                
+                                    <option value="Buck">Buck</option>
+                                
+                                    <option value="Pants">Pants</option>
+                                
+                                    <option value="Circleci">Circleci</option>
+                                
+                                    <option value="Helm">Helm</option>
+                                
+                                    <option value="Argocd">Argocd</option>
+                                
+                                    <option value="Gen Ai">Gen Ai</option>
+                                
+                                    <option value="Asus">Asus</option>
+                                
+                                    <option value="Nebius">Nebius</option>
+                                
+                                    <option value="Delphyr">Delphyr</option>
+                                
+                                    <option value="Keycare">Keycare</option>
+                                
+                                    <option value="Intelligrc">Intelligrc</option>
+                                
+                                    <option value="Renofi">Renofi</option>
+                                
+                                    <option value="Deloitte">Deloitte</option>
+                                
+                                    <option value="Shadow Ai">Shadow Ai</option>
+                                
+                                    <option value="Procode Ai">Procode Ai</option>
+                                
+                                    <option value="The Futurum Group">The Futurum Group</option>
+                                
+                                    <option value="Ayar Labs">Ayar Labs</option>
+                                
+                                    <option value="Groundhawk">Groundhawk</option>
+                                
+                                    <option value="Antiverse">Antiverse</option>
+                                
+                                    <option value="Zte">Zte</option>
+                                
+                                    <option value="Armorcode">Armorcode</option>
+                                
+                                    <option value="Oska Health">Oska Health</option>
+                                
+                                    <option value="Lenovo">Lenovo</option>
+                                
+                                    <option value="Elevance Health">Elevance Health</option>
+                                
+                                    <option value="Stock Titan">Stock Titan</option>
+                                
+                                    <option value="Huawei">Huawei</option>
+                                
+                                    <option value="Unite.Ai">Unite.Ai</option>
+                                
+                                    <option value="Dwdm">Dwdm</option>
+                                
+                                    <option value="Dataconomy">Dataconomy</option>
+                                
+                                    <option value="Deutsche Telekom">Deutsche Telekom</option>
+                                
+                                    <option value="Most Companies">Most Companies</option>
+                                
+                                    <option value="This Tech Ceo">This Tech Ceo</option>
+                                
+                                    <option value="Photonic Hardware">Photonic Hardware</option>
+                                
+                                    <option value="Hyundai">Hyundai</option>
+                                
+                                    <option value="Whatsapp">Whatsapp</option>
+                                
+                                    <option value="Telegram">Telegram</option>
+                                
+                                    <option value="Firmable">Firmable</option>
+                                
+                                    <option value="Softbank Corp.">Softbank Corp.</option>
+                                
+                                    <option value="Braincheck">Braincheck</option>
+                                
+                                    <option value="All In">All In</option>
+                                
+                                    <option value="Origen">Origen</option>
+                                
+                                    <option value="Blaize">Blaize</option>
+                                
+                                    <option value="Mckinsey & Company">Mckinsey & Company</option>
+                                
+                                    <option value="Hackernoon">Hackernoon</option>
+                                
+                                    <option value="Amazon Web Services (Aws)">Amazon Web Services (Aws)</option>
+                                
+                                    <option value="Elevenlabs">Elevenlabs</option>
+                                
+                                    <option value="Eden Ai">Eden Ai</option>
+                                
+                                    <option value="Andreessen Horowitz">Andreessen Horowitz</option>
+                                
+                                    <option value="Vibe Coding">Vibe Coding</option>
+                                
+                                    <option value="Cnbc">Cnbc</option>
+                                
+                                    <option value="Software Company">Software Company</option>
+                                
+                                    <option value="User">User</option>
+                                
+                                    <option value="Accounts Payable Manager">Accounts Payable Manager</option>
+                                
+                                    <option value="Customers">Customers</option>
+                                
+                                    <option value="Cybersecurity Firewalls">Cybersecurity Firewalls</option>
+                                
+                                    <option value="Journalism">Journalism</option>
+                                
+                                    <option value="Robotics Systems">Robotics Systems</option>
+                                
+                                    <option value="Robotic Platforms">Robotic Platforms</option>
+                                
+                                    <option value="Engineering">Engineering</option>
+                                
+                                    <option value="Marketing">Marketing</option>
+                                
+                                    <option value="Operations">Operations</option>
+                                
+                                    <option value="Analytics">Analytics</option>
+                                
+                                    <option value="Svp Of Sales & Chief Financial Officer">Svp Of Sales & Chief Financial Officer</option>
+                                
+                                    <option value="Large Language Models (Llms)">Large Language Models (Llms)</option>
+                                
+                                    <option value="Multimodal Ai">Multimodal Ai</option>
+                                
+                                    <option value="Associate General Counsel For Product And Employment">Associate General Counsel For Product And Employment</option>
+                                
+                                    <option value="Deep Learning">Deep Learning</option>
+                                
+                                    <option value="Agent/Rl Systems">Agent/Rl Systems</option>
+                                
+                                    <option value="Leading Enterprises">Leading Enterprises</option>
+                                
+                                    <option value="Production-Ready Ai Systems">Production-Ready Ai Systems</option>
+                                
+                                    <option value="Agent-Powered Tools">Agent-Powered Tools</option>
+                                
+                                    <option value="Intelligent Systems">Intelligent Systems</option>
+                                
+                                    <option value="React + Typescript">React + Typescript</option>
+                                
+                                    <option value="Ai/Ml Infrastructure">Ai/Ml Infrastructure</option>
+                                
+                                    <option value="Ai Applications">Ai Applications</option>
+                                
+                                    <option value="Large Language Model">Large Language Model</option>
+                                
+                                    <option value="Financial Services">Financial Services</option>
+                                
+                                    <option value="Insurance">Insurance</option>
+                                
+                                    <option value="Saas">Saas</option>
+                                
+                                    <option value="Staff Machine Learning Engineer">Staff Machine Learning Engineer</option>
+                                
+                                    <option value="Foundation Model Labs">Foundation Model Labs</option>
+                                
+                                    <option value="Scale'S Generative Ai Business Unit">Scale'S Generative Ai Business Unit</option>
+                                
+                                    <option value="Fortune 500 Customers">Fortune 500 Customers</option>
+                                
+                                    <option value="Researchers">Researchers</option>
+                                
+                                    <option value="Data Scientists">Data Scientists</option>
+                                
+                                    <option value="Operators">Operators</option>
+                                
+                                    <option value="Yc">Yc</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
+            
+              <div id="filter-menu" class="card-header">
+                <div class="row no-gutters">
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'item')"
+                            id="select-item"
+                        >
+                        <option value="">Select a network item</option>
+                        <option value="edge">edge</option>
+                        <option value="node">node</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="updateFilter(value, 'property')"
+                            id="select-property"
+                        >
+                        <option value="">Select a property...</option>
+                    </select>
+                  </div>
+                  <div class="col-3 pb-2">
+                    <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            id="select-value"
+                        >
+                        <option value="">Select value(s)...</option>
+                    </select>
+                  </div>
+                  <div class="col-1 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="highlightFilter(filter);">Filter</button>
+                  </div>
+                  <div class="col-2 pb-2">
+                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset Selection</button>
+                  </div>
+                </div>
+              </div>
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
+
+              
+                  // explicitly using onItemAdd and this function as we need to save multiple values
+                  let updateValueFilter = function() {
+                      return function () {
+                      filter['value'].push(arguments[0])
+                      }
+                  }
+
+                  let valueControl = new TomSelect("#select-value",{
+                      maxItems: null,
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: updateValueFilter()
+                  });
+
+                  let addValues = function() {
+                      return function () {
+                          // clear the current value options and add the selected attribute values
+                          // tom-select handles duplicates
+                          let selectedProperty = arguments[0];
+                          valueControl.clear();
+                          valueControl.clearOptions();
+                          filter['value'] = []
+                          if (filter['item'] === 'node') {
+                              for (let each in allNodes) {
+                                  valueControl.addOption({
+                                      id:allNodes[each][selectedProperty],
+                                      title:allNodes[each][selectedProperty]
+                                  })
+                              }
+                          }
+                          else if (filter['item'] === 'edge') {
+                              for (let each in allEdges) {
+                                  valueControl.addOption({
+                                      id:allEdges[each][selectedProperty],
+                                      title:allEdges[each][selectedProperty]
+                                  })
+                              }
+                          }
+                      }
+                  };
+
+                  let propControl = new TomSelect("#select-property",{
+                      valueField: 'id',
+                      labelField: 'title',
+                      searchField: 'title',
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addValues()
+                  });
+
+                  let addProperties = function() {
+                      return function () {
+                          // loops through the selected network item and adds the attributes to dropdown
+                          // tom-select handles duplicates
+                          clearFilter(false)
+                          if (arguments[0] === 'edge') {
+                              for (let each in allEdges) {
+                                  if (allEdges.hasOwnProperty(each)) {
+                                      for (let eachProp in allEdges[each]) {
+                                          if (allEdges[each].hasOwnProperty(eachProp)) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          else if (arguments[0] === 'node') {
+                              for (let each in allNodes) {
+                                  if (allNodes.hasOwnProperty(each)) {
+                                      for (let eachProp in allNodes[each]) {
+                                          if (allNodes[each].hasOwnProperty(eachProp)
+                                              && (eachProp !== 'hidden' && eachProp !== 'savedLabel'
+                                                  && eachProp !== 'hiddenLabel')) {
+                                              propControl.addOption({id: eachProp, title: eachProp})
+
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  };
+
+                  let itemControl = new TomSelect("#select-item",{
+                      create: false,
+                      sortField:{
+                          field: "text",
+                          direction: "asc"
+                      },
+                      onItemAdd: addProperties()
+                  });
+
+                  function clearFilter(reset) {
+                      // utility function to clear all the selected filter options
+                      // if reset is set to true, the existing filter will be removed
+                      // else, only the dropdown options are cleared
+                      propControl.clear();
+                      propControl.clearOptions();
+                      valueControl.clear();
+                      valueControl.clearOptions();
+                      filter = {
+                          item : '',
+                          property : '',
+                          value : []
+                      }
+                      if (reset) {
+                          itemControl.clear();
+                          filterHighlight({nodes: []})
+                      }
+                  }
+
+                  function updateFilter(value, key) {
+                      // key could be 'item' or 'property' and value is as selected in dropdown
+                      filter[key] = value
+                  }
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#999999", "font": {"color": "white"}, "id": "Accenture", "label": "Accenture", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ookla", "label": "Ookla", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Faculty", "label": "Faculty", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale", "label": "Scale", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Dan Tadross", "label": "Dan Tadross", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale Ai", "label": "Scale Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Meritalk", "label": "Meritalk", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Meta", "label": "Meta", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Smaller Startup", "label": "Smaller Startup", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "This A.I. Startup", "label": "This A.I. Startup", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Wang", "label": "Wang", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Frontier Tech Consultant", "label": "Frontier Tech Consultant", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Operations Associate", "label": "Operations Associate", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Genai", "label": "Genai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Distinguished Engineer", "label": "Distinguished Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Engineering Manager", "label": "Engineering Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head International Public Sector", "label": "Head International Public Sector", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Enterprise Account Executive", "label": "Enterprise Account Executive", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Fortune 500", "label": "Fortune 500", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Growth Strategy \u0026 Operations Manager", "label": "Growth Strategy \u0026 Operations Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Gtm Architect", "label": "Gtm Architect", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cisco", "label": "Cisco", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Dla Piper", "label": "Dla Piper", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mayo Clinic", "label": "Mayo Clinic", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Time Inc.", "label": "Time Inc.", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Government Agencies", "label": "Government Agencies", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mission Software Engineer", "label": "Mission Software Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Principal Architect", "label": "Principal Architect", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Revenue Operations Manager", "label": "Revenue Operations Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "General Counsel", "label": "General Counsel", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Time", "label": "Time", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Genai Engineering Organization", "label": "Genai Engineering Organization", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Genai Engineering", "label": "Genai Engineering", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Staff Software Engineer", "label": "Staff Software Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Costello", "label": "Costello", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cisa", "label": "Cisa", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "At\u0026T", "label": "At\u0026T", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Aws", "label": "Aws", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mistral Ai", "label": "Mistral Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Finance", "label": "Finance", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Infosys", "label": "Infosys", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Intel", "label": "Intel", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Capgemini", "label": "Capgemini", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Openai", "label": "Openai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Frontier Alliances", "label": "Frontier Alliances", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Enterprise", "label": "Enterprise", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mckinsey", "label": "Mckinsey", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Replit", "label": "Replit", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Nvidia", "label": "Nvidia", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Lumentum", "label": "Lumentum", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Photonics", "label": "Photonics", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai", "label": "Ai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Software-Defined Ai-Ran", "label": "Software-Defined Ai-Ran", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Coherent", "label": "Coherent", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "L\u0026T", "label": "L\u0026T", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ai Engineering Org", "label": "Ai Engineering Org", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale\u0027S International Public Sector (Ips)", "label": "Scale\u0027S International Public Sector (Ips)", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Digitalocean", "label": "Digitalocean", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Workato", "label": "Workato", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Sk Telecom", "label": "Sk Telecom", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Panmnesia", "label": "Panmnesia", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Skt", "label": "Skt", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Palo Alto Networks", "label": "Palo Alto Networks", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Global Telecom Partners", "label": "Global Telecom Partners", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Rise8", "label": "Rise8", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Thoughtworks", "label": "Thoughtworks", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ambient Scribe Ai", "label": "Ambient Scribe Ai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Minio", "label": "Minio", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Databricks", "label": "Databricks", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Google", "label": "Google", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Claude", "label": "Claude", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cursor", "label": "Cursor", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Latent Ai", "label": "Latent Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Aum Ventures", "label": "Aum Ventures", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cio", "label": "Cio", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Datadriveninvestor", "label": "Datadriveninvestor", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Vercel", "label": "Vercel", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Llms", "label": "Llms", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Pluralsight", "label": "Pluralsight", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Academy", "label": "Ai Academy", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Skift", "label": "Skift", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "The Ai Architects Of Travel", "label": "The Ai Architects Of Travel", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Rely", "label": "Rely", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "New Leadership", "label": "New Leadership", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Beinsure", "label": "Beinsure", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ericsson", "label": "Ericsson", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ericsson Ceo", "label": "Ericsson Ceo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Safra", "label": "Safra", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Saxo", "label": "Saxo", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Subcontractorhub", "label": "Subcontractorhub", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Curve Partners", "label": "Curve Partners", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Director Of Applied Ai", "label": "Director Of Applied Ai", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Governor Bob Ferguson", "label": "Governor Bob Ferguson", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Democrats", "label": "Democrats", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Credo", "label": "Credo", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Tensorwave", "label": "Tensorwave", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Amd", "label": "Amd", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Red Hat", "label": "Red Hat", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Telenor Ai Factory", "label": "Telenor Ai Factory", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Turiyam Ai", "label": "Turiyam Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ntt Gdc", "label": "Ntt Gdc", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ntt Global Data Centers", "label": "Ntt Global Data Centers", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mirantis", "label": "Mirantis", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Supermicro", "label": "Supermicro", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mark Zuckerberg", "label": "Mark Zuckerberg", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Facebook", "label": "Facebook", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Co-Founder", "label": "Co-Founder", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Startup", "label": "Ai Startup", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "$29 Billion Ai Startup", "label": "$29 Billion Ai Startup", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Assemblyai", "label": "Assemblyai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Superhuman Speech Recognition", "label": "Superhuman Speech Recognition", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Accel", "label": "Accel", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Insight Partners", "label": "Insight Partners", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Y Combinator\u0027S Ai Fund", "label": "Y Combinator\u0027S Ai Fund", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Patrick And John Collison", "label": "Patrick And John Collison", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Nat Friedman", "label": "Nat Friedman", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Daniel Gross", "label": "Daniel Gross", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Generative Ai", "label": "Generative Ai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Business Insider", "label": "Business Insider", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "I", "label": "I", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Anthropic", "label": "Anthropic", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Higgsfield Ai", "label": "Higgsfield Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mike Krieger", "label": "Mike Krieger", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Hexaware", "label": "Hexaware", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Microsoft", "label": "Microsoft", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Government Of Jordan", "label": "Government Of Jordan", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Video Tool", "label": "Ai Video Tool", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Tipranks", "label": "Tipranks", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "The Ceo Of Replit", "label": "The Ceo Of Replit", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ceo", "label": "Ceo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Razorpay", "label": "Razorpay", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Campus", "label": "Campus", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai-Driven Video", "label": "Ai-Driven Video", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Animation", "label": "Animation", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Snowflake", "label": "Snowflake", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Saastr", "label": "Saastr", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Amjad Masad", "label": "Amjad Masad", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Sequoia Capital", "label": "Sequoia Capital", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Humain", "label": "Humain", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Wilson Sonsini", "label": "Wilson Sonsini", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Humain One", "label": "Humain One", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Google Cloud", "label": "Google Cloud", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Startengine", "label": "Startengine", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Y Combinator", "label": "Y Combinator", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Augment Code", "label": "Augment Code", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Company", "label": "Company", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Sf Tech Ceo", "label": "Sf Tech Ceo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Replit Ceo", "label": "Replit Ceo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Jason Lemkin", "label": "Jason Lemkin", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "The Economy", "label": "The Economy", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cvai", "label": "Cvai", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Ey", "label": "Ey", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Groq", "label": "Groq", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Xr", "label": "Xr", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Viture", "label": "Viture", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mojo Vision", "label": "Mojo Vision", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Replit Agent", "label": "Replit Agent", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Jimmy Ba", "label": "Jimmy Ba", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Infrastructure Engineer", "label": "Ai Infrastructure Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Product Manager", "label": "Ai Product Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Machine Learning", "label": "Machine Learning", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Self-Driving Cars", "label": "Self-Driving Cars", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Enterprise Genai", "label": "Enterprise Genai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "International Public Sector", "label": "International Public Sector", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Machine Learning (Ml)", "label": "Machine Learning (Ml)", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Autonomous Vehicles", "label": "Autonomous Vehicles", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Business Operations \u0026 Strategy Manager", "label": "Business Operations \u0026 Strategy Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Fox", "label": "Fox", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cohere", "label": "Cohere", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Director Of Business Systems", "label": "Director Of Business Systems", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Director, Strategic Finance", "label": "Director, Strategic Finance", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Director Of Governance \u0026 Risk Compliance", "label": "Director Of Governance \u0026 Risk Compliance", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Government Entities", "label": "Government Entities", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Research Institutions", "label": "Research Institutions", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Engineering Manager, Security", "label": "Engineering Manager, Security", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Public Sector", "label": "Public Sector", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Gtm Lead, National Security \u0026 Intelligence", "label": "Gtm Lead, National Security \u0026 Intelligence", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Gtm Strategic Finance Manager", "label": "Gtm Strategic Finance Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head Of It Support", "label": "Head Of It Support", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Human Frontier Collective (Hfc)", "label": "Human Frontier Collective (Hfc)", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Agent Data Foundation", "label": "Agent Data Foundation", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Government Of Qatar", "label": "Government Of Qatar", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "U.S. Government Agencies Including The Army And Air Force", "label": "U.S. Government Agencies Including The Army And Air Force", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "National Security \u0026 Technology Strategy Fellow", "label": "National Security \u0026 Technology Strategy Fellow", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Job Title: Program Manager, Sales Enablement", "label": "Job Title: Program Manager, Sales Enablement", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Robotics Engineer", "label": "Robotics Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Senior Machine Learning Engineer - Model Evaluations, Public Sector", "label": "Senior Machine Learning Engineer - Model Evaluations, Public Sector", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Frontier Data", "label": "Frontier Data", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Senior Software Engineer, Platform \u2014 Connectivity", "label": "Senior Software Engineer, Platform \u2014 Connectivity", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Software Engineer", "label": "Software Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Generative Models", "label": "Generative Models", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Rlhf", "label": "Rlhf", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Strategic Finance Manager", "label": "Strategic Finance Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "U.S. Army", "label": "U.S. Army", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "U.S. Air Force", "label": "U.S. Air Force", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ml Infrastructure Team", "label": "Ml Infrastructure Team", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Platform", "label": "Platform", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Hireart", "label": "Hireart", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale\u0027S Robotics Business", "label": "Scale\u0027S Robotics Business", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "John Doe", "label": "John Doe", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Deal Desk \u0026 Pricing Manager", "label": "Deal Desk \u0026 Pricing Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sales Operations \u0026 Strategy Team", "label": "Sales Operations \u0026 Strategy Team", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sales And Finance Leadership", "label": "Sales And Finance Leadership", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Agentic Frameworks", "label": "Agentic Frameworks", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Generative Ai Expertise And Infrastructure", "label": "Generative Ai Expertise And Infrastructure", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale Generativeai Platform (Sgp)", "label": "Scale Generativeai Platform (Sgp)", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Director Of Enterprise Gtm", "label": "Director Of Enterprise Gtm", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Executive Assistant", "label": "Executive Assistant", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cfo", "label": "Cfo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Data", "label": "Data", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Technology And Systems", "label": "Technology And Systems", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Finance Fellow - Human Frontier Collective (Us)", "label": "Finance Fellow - Human Frontier Collective (Us)", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Finance Fellow - Human Frontier Collective (Uk)", "label": "Finance Fellow - Human Frontier Collective (Uk)", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Medical Fellow - Human Frontier Collective (Uk)", "label": "Medical Fellow - Human Frontier Collective (Uk)", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ai Labs And Platforms", "label": "Ai Labs And Platforms", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Scale\u0027S Research Team", "label": "Scale\u0027S Research Team", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Public Sector Gtm Team", "label": "Public Sector Gtm Team", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head Of Strategic Partnerships", "label": "Head Of Strategic Partnerships", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Vp Of Sales, Enterprise", "label": "Vp Of Sales, Enterprise", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head Of Enterprise Gtm", "label": "Head Of Enterprise Gtm", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Human Frontier Collective", "label": "Human Frontier Collective", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Medical Fellow - Human Frontier Collective (Us)", "label": "Medical Fellow - Human Frontier Collective (Us)", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale\u0027S Robotics Business Unit", "label": "Scale\u0027S Robotics Business Unit", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Technical Program Manager", "label": "Technical Program Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Government Customers", "label": "Government Customers", "shape": "dot", "size": 10}, {"color": "#999999", "font": {"color": "white"}, "id": "Operations \u0026 Strategy Manager, Public Sector", "label": "Operations \u0026 Strategy Manager, Public Sector", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head Of Business Operations (Bizops), Public Sector", "label": "Head Of Business Operations (Bizops), Public Sector", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Partnerships Lead", "label": "Partnerships Lead", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Head Of Public Sector Gtm", "label": "Head Of Public Sector Gtm", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Global Systems Integrators (Gsis)", "label": "Global Systems Integrators (Gsis)", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Defense Primes", "label": "Defense Primes", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Program Manager", "label": "Program Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale\u0027S Public Sector Business", "label": "Scale\u0027S Public Sector Business", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Sales Enablement Team", "label": "Sales Enablement Team", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Robotics Operations Manager", "label": "Robotics Operations Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Operations Supervisors", "label": "Operations Supervisors", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Robotics Technicians", "label": "Robotics Technicians", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Data Collection Associates", "label": "Data Collection Associates", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Security Engineer", "label": "Security Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Product Security Team", "label": "Product Security Team", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale Gp", "label": "Scale Gp", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "React", "label": "React", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Typescript", "label": "Typescript", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Python", "label": "Python", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Vector Databases", "label": "Vector Databases", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Embeddings", "label": "Embeddings", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Sql", "label": "Sql", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Kubernetes", "label": "Kubernetes", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Containerization", "label": "Containerization", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Microservice Architectures", "label": "Microservice Architectures", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Staff Infrastructure Software Engineer", "label": "Staff Infrastructure Software Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Terraform", "label": "Terraform", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Enterprise Ai", "label": "Enterprise Ai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Data Platform", "label": "Data Platform", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Docker", "label": "Docker", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Nodejs", "label": "Nodejs", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Nextjs", "label": "Nextjs", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Bazel", "label": "Bazel", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Buck", "label": "Buck", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Pants", "label": "Pants", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Circleci", "label": "Circleci", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Helm", "label": "Helm", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Argocd", "label": "Argocd", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Gen Ai", "label": "Gen Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Asus", "label": "Asus", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Nebius", "label": "Nebius", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Delphyr", "label": "Delphyr", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Keycare", "label": "Keycare", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Intelligrc", "label": "Intelligrc", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Renofi", "label": "Renofi", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Deloitte", "label": "Deloitte", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Shadow Ai", "label": "Shadow Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Procode Ai", "label": "Procode Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "The Futurum Group", "label": "The Futurum Group", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ayar Labs", "label": "Ayar Labs", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Groundhawk", "label": "Groundhawk", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Antiverse", "label": "Antiverse", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Zte", "label": "Zte", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Armorcode", "label": "Armorcode", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Oska Health", "label": "Oska Health", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Lenovo", "label": "Lenovo", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Elevance Health", "label": "Elevance Health", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Stock Titan", "label": "Stock Titan", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Huawei", "label": "Huawei", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Unite.Ai", "label": "Unite.Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Dwdm", "label": "Dwdm", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Dataconomy", "label": "Dataconomy", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Deutsche Telekom", "label": "Deutsche Telekom", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Most Companies", "label": "Most Companies", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "This Tech Ceo", "label": "This Tech Ceo", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Photonic Hardware", "label": "Photonic Hardware", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Hyundai", "label": "Hyundai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Whatsapp", "label": "Whatsapp", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Telegram", "label": "Telegram", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Firmable", "label": "Firmable", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Softbank Corp.", "label": "Softbank Corp.", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Braincheck", "label": "Braincheck", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "All In", "label": "All In", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Origen", "label": "Origen", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Blaize", "label": "Blaize", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Mckinsey \u0026 Company", "label": "Mckinsey \u0026 Company", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Hackernoon", "label": "Hackernoon", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Amazon Web Services (Aws)", "label": "Amazon Web Services (Aws)", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Elevenlabs", "label": "Elevenlabs", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Eden Ai", "label": "Eden Ai", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Andreessen Horowitz", "label": "Andreessen Horowitz", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Vibe Coding", "label": "Vibe Coding", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cnbc", "label": "Cnbc", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Software Company", "label": "Software Company", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "User", "label": "User", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Accounts Payable Manager", "label": "Accounts Payable Manager", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Customers", "label": "Customers", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Cybersecurity Firewalls", "label": "Cybersecurity Firewalls", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Journalism", "label": "Journalism", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Robotics Systems", "label": "Robotics Systems", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Robotic Platforms", "label": "Robotic Platforms", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Engineering", "label": "Engineering", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Marketing", "label": "Marketing", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Operations", "label": "Operations", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Analytics", "label": "Analytics", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Svp Of Sales \u0026 Chief Financial Officer", "label": "Svp Of Sales \u0026 Chief Financial Officer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Large Language Models (Llms)", "label": "Large Language Models (Llms)", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Multimodal Ai", "label": "Multimodal Ai", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Associate General Counsel For Product And Employment", "label": "Associate General Counsel For Product And Employment", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Deep Learning", "label": "Deep Learning", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Agent/Rl Systems", "label": "Agent/Rl Systems", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Leading Enterprises", "label": "Leading Enterprises", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Production-Ready Ai Systems", "label": "Production-Ready Ai Systems", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Agent-Powered Tools", "label": "Agent-Powered Tools", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Intelligent Systems", "label": "Intelligent Systems", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "React + Typescript", "label": "React + Typescript", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai/Ml Infrastructure", "label": "Ai/Ml Infrastructure", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Ai Applications", "label": "Ai Applications", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Large Language Model", "label": "Large Language Model", "shape": "dot", "size": 20, "title": "Technology"}, {"color": "#999999", "font": {"color": "white"}, "id": "Financial Services", "label": "Financial Services", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Insurance", "label": "Insurance", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Saas", "label": "Saas", "shape": "dot", "size": 20, "title": "Industry"}, {"color": "#999999", "font": {"color": "white"}, "id": "Staff Machine Learning Engineer", "label": "Staff Machine Learning Engineer", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Foundation Model Labs", "label": "Foundation Model Labs", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Scale\u0027S Generative Ai Business Unit", "label": "Scale\u0027S Generative Ai Business Unit", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Fortune 500 Customers", "label": "Fortune 500 Customers", "shape": "dot", "size": 20, "title": "Organization"}, {"color": "#999999", "font": {"color": "white"}, "id": "Researchers", "label": "Researchers", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Data Scientists", "label": "Data Scientists", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Operators", "label": "Operators", "shape": "dot", "size": 20, "title": "Person"}, {"color": "#999999", "font": {"color": "white"}, "id": "Yc", "label": "Yc", "shape": "dot", "size": 20, "title": "Organization"}]);
+                  edges = new vis.DataSet([{"from": "Accenture", "label": "ACQUIRED", "to": "Ookla", "width": 1}, {"from": "Accenture", "label": "ACQUIRED", "to": "Faculty", "width": 1}, {"from": "Accenture", "label": "PARTNERED_WITH", "to": "Scale", "width": 1}, {"from": "Dan Tadross", "label": "WORKS_FOR", "to": "Scale Ai", "width": 1}, {"from": "Dan Tadross", "label": "INTERVIEWED_BY", "to": "Meritalk", "width": 1}, {"from": "Scale Ai", "label": "PARTNER", "to": "Meta", "width": 1}, {"from": "Scale Ai", "label": "LOST_BID_TO", "to": "Smaller Startup", "width": 1}, {"from": "Scale Ai", "label": "COMPETED_WITH", "to": "This A.I. Startup", "width": 1}, {"from": "Scale Ai", "label": "FOUNDER", "to": "Wang", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Frontier Tech Consultant", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Operations Associate", "width": 1}, {"from": "Scale Ai", "label": "PART_OF", "to": "Genai", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Distinguished Engineer", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Engineering Manager", "width": 1}, {"from": "Scale Ai", "label": "EMPLOYS", "to": "Head International Public Sector", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Enterprise Account Executive", "width": 1}, {"from": "Scale Ai", "label": "SELLS_TO", "to": "Fortune 500", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Growth Strategy \u0026 Operations Manager", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Gtm Architect", "width": 1}, {"from": "Scale Ai", "label": "PARTNER", "to": "Cisco", "width": 1}, {"from": "Scale Ai", "label": "PARTNER", "to": "Dla Piper", "width": 1}, {"from": "Scale Ai", "label": "PARTNER", "to": "Mayo Clinic", "width": 1}, {"from": "Scale Ai", "label": "PARTNER", "to": "Time Inc.", "width": 1}, {"from": "Scale Ai", "label": "CUSTOMER_OF", "to": "Government Agencies", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Mission Software Engineer", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Principal Architect", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Revenue Operations Manager", "width": 1}, {"from": "Scale Ai", "label": "REPORTS_TO", "to": "General Counsel", "width": 1}, {"from": "Scale Ai", "label": "POWERS_PROJECTS", "to": "Time", "width": 1}, {"from": "Scale Ai", "label": "PART_OF", "to": "Genai Engineering Organization", "width": 1}, {"from": "Scale Ai", "label": "PART_OF", "to": "Genai Engineering", "width": 1}, {"from": "Scale Ai", "label": "WORKS_FOR", "to": "Staff Software Engineer", "width": 1}, {"from": "Costello", "label": "WORKS_FOR", "to": "Cisa", "width": 1}, {"from": "At\u0026T", "label": "COLLABORATION", "to": "Aws", "width": 1}, {"from": "Mistral Ai", "label": "SERVICES_FOR", "to": "Finance", "width": 1}, {"from": "Infosys", "label": "PARTNERSHIP", "to": "Intel", "width": 1}, {"from": "Capgemini", "label": "JOINS", "to": "Openai", "width": 1}, {"from": "Openai", "label": "PARTNERED_WITH", "to": "Frontier Alliances", "width": 1}, {"from": "Openai", "label": "SCALED_AI_COWORKERS_IN", "to": "Enterprise", "width": 1}, {"from": "Openai", "label": "PARTNERSHIP", "to": "Mckinsey", "width": 1}, {"from": "Openai", "label": "COMPETITOR", "to": "Replit", "width": 1}, {"from": "Openai", "label": "PARTNERED_WITH", "to": "Scale", "width": 1}, {"from": "Nvidia", "label": "STRATEGIC_PARTNERSHIP", "to": "Lumentum", "width": 1}, {"from": "Nvidia", "label": "INVESTMENT", "to": "Photonics", "width": 1}, {"from": "Nvidia", "label": "RELATED_TO", "to": "Ai", "width": 1}, {"from": "Nvidia", "label": "DEVELOPED", "to": "Software-Defined Ai-Ran", "width": 1}, {"from": "Nvidia", "label": "INVESTMENT", "to": "Coherent", "width": 1}, {"from": "Nvidia", "label": "PARTNERED_WITH", "to": "L\u0026T", "width": 1}, {"from": "Meta", "label": "FORMS", "to": "Ai Engineering Org", "width": 1}, {"from": "Meta", "label": "PARTNER", "to": "Scale\u0027S International Public Sector (Ips)", "width": 1}, {"from": "Meta", "label": "PARTNERED_WITH", "to": "Scale", "width": 1}, {"from": "Digitalocean", "label": "POWERS", "to": "Workato", "width": 1}, {"from": "Sk Telecom", "label": "PARTNERSHIP", "to": "Panmnesia", "width": 1}, {"from": "Panmnesia", "label": "PARTNERSHIP", "to": "Skt", "width": 1}, {"from": "Palo Alto Networks", "label": "PARTNERED_WITH", "to": "Global Telecom Partners", "width": 1}, {"from": "Rise8", "label": "PARTNERED_WITH", "to": "Thoughtworks", "width": 1}, {"from": "Thoughtworks", "label": "SUPPORTS_ROLLOUT", "to": "Ambient Scribe Ai", "width": 1}, {"from": "Minio", "label": "PROVIDES_ACCESS_TO", "to": "Databricks", "width": 1}, {"from": "Google", "label": "PARTNERSHIP", "to": "Replit", "width": 1}, {"from": "Google", "label": "CHALLENGE", "to": "Claude", "width": 1}, {"from": "Google", "label": "CHALLENGE", "to": "Cursor", "width": 1}, {"from": "Latent Ai", "label": "INVESTED_IN", "to": "Aum Ventures", "width": 1}, {"from": "Ai", "label": "PREDICTED_TO_ADD_VALUE", "to": "Mckinsey", "width": 1}, {"from": "Ai", "label": "SCALING", "to": "Cio", "width": 1}, {"from": "Ai", "label": "USES", "to": "Datadriveninvestor", "width": 1}, {"from": "Ai", "label": "INVESTIGATING", "to": "Replit", "width": 1}, {"from": "Ai", "label": "RELATED_TO", "to": "Vercel", "width": 1}, {"from": "Ai", "label": "USES", "to": "Scale", "width": 1}, {"from": "Ai", "label": "USES", "to": "Llms", "width": 1}, {"from": "Pluralsight", "label": "LAUNCHES", "to": "Ai Academy", "width": 1}, {"from": "Skift", "label": "HOSTED_EVENT", "to": "The Ai Architects Of Travel", "width": 1}, {"from": "Rely", "label": "LEADERSHIP", "to": "New Leadership", "width": 1}, {"from": "Mckinsey", "label": "REPORTED_ON", "to": "Beinsure", "width": 1}, {"from": "Ericsson", "label": "CEO_OF", "to": "Ericsson Ceo", "width": 1}, {"from": "Safra", "label": "DEAL_PARTNER", "to": "Saxo", "width": 1}, {"from": "Subcontractorhub", "label": "INVESTMENT", "to": "Curve Partners", "width": 1}, {"from": "Enterprise", "label": "PARTNERS_WITH", "to": "Director Of Applied Ai", "width": 1}, {"from": "Governor Bob Ferguson", "label": "PROFESSOR", "to": "Democrats", "width": 1}, {"from": "Credo", "label": "PARTNERSHIP", "to": "Tensorwave", "width": 1}, {"from": "Credo", "label": "POWER_PROVIDER", "to": "Amd", "width": 1}, {"from": "Red Hat", "label": "PARTNERED_WITH", "to": "Telenor Ai Factory", "width": 1}, {"from": "Turiyam Ai", "label": "PARTNERS_WITH", "to": "Ntt Gdc", "width": 1}, {"from": "Turiyam Ai", "label": "PARTNERS_WITH", "to": "Ntt Global Data Centers", "width": 1}, {"from": "Mirantis", "label": "PARTNERED_WITH", "to": "Supermicro", "width": 1}, {"from": "Mark Zuckerberg", "label": "WORKS_FOR", "to": "Facebook", "width": 1}, {"from": "Co-Founder", "label": "FOUNDER", "to": "Ai Startup", "width": 1}, {"from": "Ai Startup", "label": "VALUE", "to": "$29 Billion Ai Startup", "width": 1}, {"from": "Assemblyai", "label": "DEVELOPED", "to": "Superhuman Speech Recognition", "width": 1}, {"from": "Assemblyai", "label": "FUNDED_BY", "to": "Accel", "width": 1}, {"from": "Assemblyai", "label": "FUNDED_BY", "to": "Insight Partners", "width": 1}, {"from": "Assemblyai", "label": "FUNDED_BY", "to": "Y Combinator\u0027S Ai Fund", "width": 1}, {"from": "Assemblyai", "label": "FUNDED_BY", "to": "Patrick And John Collison", "width": 1}, {"from": "Assemblyai", "label": "INVESTOR", "to": "Nat Friedman", "width": 1}, {"from": "Assemblyai", "label": "INVESTOR", "to": "Daniel Gross", "width": 1}, {"from": "Generative Ai", "label": "USES", "to": "Scale", "width": 1}, {"from": "Business Insider", "label": "WORKS_AT", "to": "I", "width": 1}, {"from": "Anthropic", "label": "FUNDING_PARTNER", "to": "Replit", "width": 1}, {"from": "Anthropic", "label": "FUNDING_PARTNER", "to": "Higgsfield Ai", "width": 1}, {"from": "Anthropic", "label": "WORKS_FOR", "to": "Mike Krieger", "width": 1}, {"from": "Replit", "label": "COMPETITOR", "to": "Cursor", "width": 1}, {"from": "Replit", "label": "VALUED_AT", "to": "Replit", "width": 1}, {"from": "Replit", "label": "TIED_INTO", "to": "Hexaware", "width": 1}, {"from": "Replit", "label": "PARTNERSHIP", "to": "Microsoft", "width": 1}, {"from": "Replit", "label": "COLLABORATED_WITH", "to": "Government Of Jordan", "width": 1}, {"from": "Replit", "label": "USES", "to": "Ai Video Tool", "width": 1}, {"from": "Replit", "label": "SHOWCASES", "to": "Tipranks", "width": 1}, {"from": "Replit", "label": "WORKS_AT", "to": "The Ceo Of Replit", "width": 1}, {"from": "Replit", "label": "APOLOGIZED_FOR", "to": "Ceo", "width": 1}, {"from": "Replit", "label": "PARTNERSHIP", "to": "Razorpay", "width": 1}, {"from": "Replit", "label": "PARTNERSHIP", "to": "Campus", "width": 1}, {"from": "Replit", "label": "DEVELOPS", "to": "Ai-Driven Video", "width": 1}, {"from": "Replit", "label": "DEVELOPS", "to": "Animation", "width": 1}, {"from": "Replit", "label": "INTEGRATED_WITH", "to": "Snowflake", "width": 1}, {"from": "Replit", "label": "RELATED_TO", "to": "Saastr", "width": 1}, {"from": "Replit", "label": "CEO", "to": "Amjad Masad", "width": 1}, {"from": "Replit", "label": "INVESTED_BY", "to": "Sequoia Capital", "width": 1}, {"from": "Replit", "label": "PARTNERED_WITH", "to": "Humain", "width": 1}, {"from": "Replit", "label": "ADVISOR", "to": "Wilson Sonsini", "width": 1}, {"from": "Replit", "label": "PARTNER", "to": "Humain One", "width": 1}, {"from": "Replit", "label": "PARTNERSHIP", "to": "Google Cloud", "width": 1}, {"from": "Replit", "label": "VALUATION_REPORTS", "to": "Startengine", "width": 1}, {"from": "Replit", "label": "FUNDING", "to": "Y Combinator", "width": 1}, {"from": "Cursor", "label": "ASSISTS", "to": "Augment Code", "width": 1}, {"from": "Saastr", "label": "PUBLISHER", "to": "Saastr", "width": 1}, {"from": "Saastr", "label": "PUBLISHED_BY", "to": "Vercel", "width": 1}, {"from": "Microsoft", "label": "PARTNERED_WITH", "to": "Scale", "width": 1}, {"from": "Company", "label": "PROFESSOR", "to": "Sf Tech Ceo", "width": 1}, {"from": "Replit Ceo", "label": "EXCLUSIVE_INTERVIEW", "to": "Jason Lemkin", "width": 1}, {"from": "Replit Ceo", "label": "STATEMENT", "to": "The Economy", "width": 1}, {"from": "Amjad Masad", "label": "WORKS_FOR", "to": "Cvai", "width": 1}, {"from": "Humain One", "label": "PARTNER", "to": "Ey", "width": 1}, {"from": "Humain One", "label": "PARTNER", "to": "Groq", "width": 1}, {"from": "Xr", "label": "FUNDING_PARTNER", "to": "Viture", "width": 1}, {"from": "Xr", "label": "FUNDING_PARTNER", "to": "Mojo Vision", "width": 1}, {"from": "Replit Agent", "label": "ASSISTS", "to": "Augment Code", "width": 1}, {"from": "Jimmy Ba", "label": "FOUNDING_MEMBER", "to": "Cvai", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Ai Infrastructure Engineer", "width": 1}, {"from": "Scale", "label": "WORKS_AT", "to": "Ai Product Manager", "width": 1}, {"from": "Scale", "label": "USES", "to": "Machine Learning", "width": 1}, {"from": "Scale", "label": "SERVES", "to": "Self-Driving Cars", "width": 1}, {"from": "Scale", "label": "PART_OF", "to": "Enterprise Genai", "width": 1}, {"from": "Scale", "label": "PART_OF", "to": "International Public Sector", "width": 1}, {"from": "Scale", "label": "DEVELOPS", "to": "Machine Learning (Ml)", "width": 1}, {"from": "Scale", "label": "DEVELOPS", "to": "Autonomous Vehicles", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Business Operations \u0026 Strategy Manager", "width": 1}, {"from": "Scale", "label": "PARTNERED_WITH", "to": "Fox", "width": 1}, {"from": "Scale", "label": "PARTNERED_WITH", "to": "Cohere", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Director Of Applied Ai", "width": 1}, {"from": "Scale", "label": "WORKS_AT", "to": "Director Of Business Systems", "width": 1}, {"from": "Scale", "label": "WORKS_AT", "to": "Director, Strategic Finance", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Director Of Governance \u0026 Risk Compliance", "width": 1}, {"from": "Scale", "label": "WORKS_WITH", "to": "Government Entities", "width": 1}, {"from": "Scale", "label": "WORKS_WITH", "to": "Research Institutions", "width": 1}, {"from": "Scale", "label": "EMPLOYS", "to": "Engineering Manager, Security", "width": 1}, {"from": "Scale", "label": "PARTNER", "to": "Public Sector", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Gtm Lead, National Security \u0026 Intelligence", "width": 1}, {"from": "Scale", "label": "EMPLOYED_BY", "to": "Gtm Strategic Finance Manager", "width": 1}, {"from": "Scale", "label": "EMPLOYS", "to": "Head Of It Support", "width": 1}, {"from": "Scale", "label": "HOSTS", "to": "Human Frontier Collective (Hfc)", "width": 1}, {"from": "Scale", "label": "PART_OF", "to": "Agent Data Foundation", "width": 1}, {"from": "Scale", "label": "PARTNERS_WITH", "to": "Cisco", "width": 1}, {"from": "Scale", "label": "PARTNERS_WITH", "to": "Dla Piper", "width": 1}, {"from": "Scale", "label": "PARTNERS_WITH", "to": "Mayo Clinic", "width": 1}, {"from": "Scale", "label": "PARTNERS_WITH", "to": "Time Inc.", "width": 1}, {"from": "Scale", "label": "PARTNER", "to": "Government Of Qatar", "width": 1}, {"from": "Scale", "label": "PARTNER", "to": "U.S. Government Agencies Including The Army And Air Force", "width": 1}, {"from": "Scale", "label": "EMPLOYS", "to": "National Security \u0026 Technology Strategy Fellow", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Job Title: Program Manager, Sales Enablement", "width": 1}, {"from": "Scale", "label": "EMPLOYS", "to": "Robotics Engineer", "width": 1}, {"from": "Scale", "label": "WORKS_WITH", "to": "Government Agencies", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Senior Machine Learning Engineer - Model Evaluations, Public Sector", "width": 1}, {"from": "Scale", "label": "PART_OF", "to": "Frontier Data", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Senior Software Engineer, Platform \u2014 Connectivity", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Software Engineer", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Staff Software Engineer", "width": 1}, {"from": "Scale", "label": "USES", "to": "Llms", "width": 1}, {"from": "Scale", "label": "USES", "to": "Generative Models", "width": 1}, {"from": "Scale", "label": "USES", "to": "Rlhf", "width": 1}, {"from": "Scale", "label": "WORKS_FOR", "to": "Strategic Finance Manager", "width": 1}, {"from": "Scale", "label": "PARTNERED_WITH", "to": "U.S. Army", "width": 1}, {"from": "Scale", "label": "PARTNERED_WITH", "to": "U.S. Air Force", "width": 1}, {"from": "Ai Infrastructure Engineer", "label": "WORKS_FOR", "to": "Ml Infrastructure Team", "width": 1}, {"from": "Software Engineer", "label": "WORKS_FOR", "to": "Ml Infrastructure Team", "width": 1}, {"from": "Software Engineer", "label": "WORKS_AT", "to": "Platform", "width": 1}, {"from": "Frontier Tech Consultant", "label": "CONTRACTED_BY", "to": "Hireart", "width": 1}, {"from": "International Public Sector", "label": "WORKS_FOR", "to": "Strategic Finance Manager", "width": 1}, {"from": "Scale\u0027S International Public Sector (Ips)", "label": "PARTNER", "to": "Cisco", "width": 1}, {"from": "Scale\u0027S International Public Sector (Ips)", "label": "PARTNER", "to": "Dla Piper", "width": 1}, {"from": "Scale\u0027S International Public Sector (Ips)", "label": "PARTNER", "to": "Mayo Clinic", "width": 1}, {"from": "Scale\u0027S International Public Sector (Ips)", "label": "PARTNER", "to": "Time Inc.", "width": 1}, {"from": "Scale\u0027S Robotics Business", "label": "EMPLOYEE_OF", "to": "John Doe", "width": 1}, {"from": "Deal Desk \u0026 Pricing Manager", "label": "WORKS_CLOSERLY_WITH", "to": "Sales Operations \u0026 Strategy Team", "width": 1}, {"from": "Deal Desk \u0026 Pricing Manager", "label": "REPORTS_TO", "to": "Sales And Finance Leadership", "width": 1}, {"from": "Public Sector", "label": "LEADS_TEAM", "to": "Engineering Manager", "width": 1}, {"from": "Agentic Frameworks", "label": "USES", "to": "Llms", "width": 1}, {"from": "Distinguished Engineer", "label": "USES", "to": "Generative Ai Expertise And Infrastructure", "width": 1}, {"from": "Distinguished Engineer", "label": "WORKS_ON", "to": "Scale Generativeai Platform (Sgp)", "width": 1}, {"from": "Enterprise Account Executive", "label": "REPORTS_TO", "to": "Director Of Enterprise Gtm", "width": 1}, {"from": "Executive Assistant", "label": "PROFESSOR", "to": "Cfo", "width": 1}, {"from": "Executive Assistant", "label": "WORKS_FOR", "to": "Data", "width": 1}, {"from": "Executive Assistant", "label": "WORKS_FOR", "to": "Technology And Systems", "width": 1}, {"from": "Finance Fellow - Human Frontier Collective (Us)", "label": "PROFESSOR", "to": "Human Frontier Collective (Hfc)", "width": 1}, {"from": "Human Frontier Collective (Hfc)", "label": "WORKS_FOR", "to": "Finance Fellow - Human Frontier Collective (Uk)", "width": 1}, {"from": "Human Frontier Collective (Hfc)", "label": "FELLOW", "to": "Medical Fellow - Human Frontier Collective (Uk)", "width": 1}, {"from": "Finance Fellow - Human Frontier Collective (Uk)", "label": "COLLABORATES_WITH", "to": "Ai Labs And Platforms", "width": 1}, {"from": "Finance Fellow - Human Frontier Collective (Uk)", "label": "WORKS_WITH", "to": "Scale\u0027S Research Team", "width": 1}, {"from": "Gtm Strategic Finance Manager", "label": "WORKS_FOR", "to": "Public Sector Gtm Team", "width": 1}, {"from": "Head Of Strategic Partnerships", "label": "REPORTS_TO", "to": "Vp Of Sales, Enterprise", "width": 1}, {"from": "Gtm Architect", "label": "REPORTS_TO", "to": "Head Of Enterprise Gtm", "width": 1}, {"from": "Human Frontier Collective", "label": "FELLOW_OF", "to": "Medical Fellow - Human Frontier Collective (Us)", "width": 1}, {"from": "Scale\u0027S Robotics Business Unit", "label": "WORKS_FOR", "to": "Technical Program Manager", "width": 1}, {"from": "Mission Software Engineer", "label": "SUPPORTS", "to": "Government Customers", "width": 1}, {"from": "Operations \u0026 Strategy Manager, Public Sector", "label": "REPORTS_TO", "to": "Head Of Business Operations (Bizops), Public Sector", "width": 1}, {"from": "Partnerships Lead", "label": "REPORTS_TO", "to": "Head Of Public Sector Gtm", "width": 1}, {"from": "Partnerships Lead", "label": "PARTNERS_WITH", "to": "Global Systems Integrators (Gsis)", "width": 1}, {"from": "Partnerships Lead", "label": "PARTNERS_WITH", "to": "Defense Primes", "width": 1}, {"from": "Program Manager", "label": "WORKS_FOR", "to": "Scale\u0027S Public Sector Business", "width": 1}, {"from": "Job Title: Program Manager, Sales Enablement", "label": "WORKS_FOR", "to": "Sales Enablement Team", "width": 1}, {"from": "Robotics Operations Manager", "label": "PROFESSOR", "to": "Operations Supervisors", "width": 1}, {"from": "Robotics Operations Manager", "label": "PROFESSOR", "to": "Robotics Technicians", "width": 1}, {"from": "Robotics Operations Manager", "label": "PROFESSOR", "to": "Data Collection Associates", "width": 1}, {"from": "Security Engineer", "label": "WORKS_FOR", "to": "Product Security Team", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "React", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Typescript", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Python", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Llms", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Vector Databases", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Embeddings", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Sql", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Kubernetes", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Containerization", "width": 1}, {"from": "Scale Gp", "label": "USES", "to": "Microservice Architectures", "width": 1}, {"from": "Scale Gp", "label": "WORKS_FOR", "to": "Staff Infrastructure Software Engineer", "width": 1}, {"from": "Llms", "label": "USES", "to": "Vector Databases", "width": 1}, {"from": "Kubernetes", "label": "USES", "to": "Terraform", "width": 1}, {"from": "Staff Infrastructure Software Engineer", "label": "DEVELOPS", "to": "Enterprise Ai", "width": 1}, {"from": "Staff Software Engineer", "label": "WORKS_FOR", "to": "Data Platform", "width": 1}, {"from": "Terraform", "label": "USES", "to": "Docker", "width": 1}, {"from": "Nodejs", "label": "USES", "to": "Nextjs", "width": 1}, {"from": "Bazel", "label": "USES", "to": "Buck", "width": 1}, {"from": "Pants", "label": "USES", "to": "Circleci", "width": 1}, {"from": "Helm", "label": "USES", "to": "Argocd", "width": 1}, {"from": "Strategic Finance Manager", "label": "WORKS_FOR", "to": "Gen Ai", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.15,
+            "damping": 0.09,
+            "nodeDistance": 200,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
