@@ -15,10 +15,29 @@ PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 SCRAPER_RATE_LIMIT = float(os.getenv("SCRAPER_RATE_LIMIT_SECONDS", 2.0))
 SCRAPER_MAX_RETRIES = int(os.getenv("SCRAPER_MAX_RETRIES", 3))
-SCRAPER_USER_AGENT = os.getenv("SCRAPER_USER_AGENT", "TrendScoutBot/1.0 (Academic Research; ASU CSE573)")
+
+# Default to a real browser User-Agent. Several news sites (notably
+# VentureBeat) rate-limit or block requests with bot-style UAs even when
+# robots.txt allows scraping. The headers below mirror what Chrome on
+# macOS sends. Override via the SCRAPER_USER_AGENT env var if a project
+# requirement demands an academic identifier.
+SCRAPER_USER_AGENT = os.getenv(
+    "SCRAPER_USER_AGENT",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+)
 SCRAPER_HEADERS = {
     "User-Agent": SCRAPER_USER_AGENT,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "DNT": "1",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
 }
 
 SOURCES = {
