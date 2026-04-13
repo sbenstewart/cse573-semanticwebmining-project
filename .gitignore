@@ -16,8 +16,8 @@ env/
 
 # Data files
 data/raw/
-data/processed/
-*.jsonl
+# data/processed/ — committed for reproducibility (canonical Phase 2 input)
+# *.jsonl kept for data/raw/ only, not data/processed/
 *.json.gz
 
 # Trained models
@@ -46,3 +46,7 @@ htmlcov/
 # Logs
 *.log
 logs/
+
+# Ignore future backups but keep the canonical Phase 2 snapshot
+backups/*
+!backups/kg_v3_backup.cypher
