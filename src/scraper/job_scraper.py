@@ -1,3 +1,19 @@
+"""
+src/scraper/job_scraper.py
+
+Public job posting scraper for AI skill / hiring signal extraction.
+
+Targets:
+  - Greenhouse public job boards (format: boards.greenhouse.io/company/jobs)
+  - Lever public job boards (format: jobs.lever.co/company)
+
+FIXES in v2:
+  - Per-company cap (default 10 posts) to prevent any single company
+    from dominating the corpus
+  - Improved URL deduplication
+  - Better error handling per board
+"""
+
 import logging
 import re
 from urllib.parse import urljoin
@@ -24,25 +40,41 @@ KNOWN_AI_COMPANY_BOARDS = [
     {"platform": "lever",      "company": "perplexity",   "url": "https://jobs.lever.co/perplexity"},
 ]
 
+# Maximum job postings to collect per company
+PER_COMPANY_CAP = 10
+
 
 class JobScraper(BaseScraper):
 
-    def __init__(self):
+    def __init__(self, per_company_cap: int = PER_COMPANY_CAP):
         super().__init__(source_name="JobBoards", base_url="https://boards.greenhouse.io")
         self._company_boards = KNOWN_AI_COMPANY_BOARDS
+        self.per_company_cap = per_company_cap
 
     def fetch_article_list(self, max_articles: int) -> list:
         job_urls = []
         seen = set()
+
         for board in self._company_boards:
             if len(job_urls) >= max_articles:
                 break
-            urls = self._get_board_job_urls(board)
-            for url in urls:
-                if url not in seen:
+
+            # Get URLs for this company, capped per company
+            company_urls = self._get_board_job_urls(board)
+            company_count = 0
+
+            for url in company_urls:
+                if url not in seen and company_count < self.per_company_cap:
                     job_urls.append(url)
                     seen.add(url)
-        logger.info(f"[JobScraper] Found {len(job_urls)} job posting URLs")
+                    company_count += 1
+
+            logger.info(
+                f"[JobScraper] {board['company']}: "
+                f"{company_count} URLs (capped at {self.per_company_cap})"
+            )
+
+        logger.info(f"[JobScraper] Total: {len(job_urls)} job URLs across {len(self._company_boards)} companies")
         return job_urls[:max_articles]
 
     def parse_article(self, html: str, url: str) -> dict:
