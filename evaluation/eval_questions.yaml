@@ -1,0 +1,188 @@
+# TrendScout AI 2.0 — Phase 4 Evaluation Question Set
+#
+# 25 questions across 5 categories. Each has expected_keywords used for
+# automated scoring (case-insensitive substring match) and optional
+# expected_doc_ids for citation precision/recall.
+#
+# Review the gold answers against the live graph before benchmarking;
+# Phase 2 extraction imperfections mean some "gold" answers may need
+# adjustment to reflect what's actually in the KG.
+
+version: 1
+total_questions: 25
+
+questions:
+  # ==========================================================================
+  # CATEGORY 1 — FACTUAL LOOKUP (5)
+  # Direct structured queries. Approach A's natural habitat.
+  # ==========================================================================
+
+  - id: F1
+    category: factual_lookup
+    question: "Who invested in Replit?"
+    expected_keywords: ["Founders Fund", "GV", "Benchmark"]
+    notes: "5 investors; gold requires at least 3 of Founders Fund, GV, Benchmark, Tiger Global, Fidelity."
+
+  - id: F2
+    category: factual_lookup
+    question: "How much did Anthropic raise in its Series C?"
+    expected_keywords: ["Anthropic", "1.5", "Series C"]
+    notes: "Anthropic Series C 2023-02 for $1.5B. Exact-match on structured fact."
+
+  - id: F3
+    category: factual_lookup
+    question: "What is OpenAI's largest funding round in the graph?"
+    expected_keywords: ["OpenAI", "50"]
+    notes: "OpenAI $50B Growth. Tests A's ORDER+LIMIT and B's top-article retrieval."
+
+  - id: F4
+    category: factual_lookup
+    question: "Which companies did Founders Fund invest in?"
+    expected_keywords: ["Replit"]
+    notes: "Per investor-portfolio: Replit, Augment Code, Anthropic. Gold: at least 1."
+
+  - id: F5
+    category: factual_lookup
+    question: "What products has Scale AI announced?"
+    expected_keywords: ["SGP"]
+    notes: "Scale AI has ~35 products incl. SGP, Donovan, GenAI Platform. Gold: at least 1."
+
+  # ==========================================================================
+  # CATEGORY 2 — AGGREGATION (5)
+  # Counting, ordering, summing. A's known weakness.
+  # ==========================================================================
+
+  - id: A1
+    category: aggregation
+    question: "What are the 3 biggest funding rounds?"
+    expected_keywords: ["OpenAI", "50", "Anthropic", "30"]
+    notes: "Top 3: OpenAI $50B, Anthropic $30B, Databricks $20B. Known A failure."
+
+  - id: A2
+    category: aggregation
+    question: "How many funding rounds are in the graph?"
+    expected_keywords: ["35"]
+    notes: "Total FundingRound nodes = 35."
+
+  - id: A3
+    category: aggregation
+    question: "Which investor appears in the most funding rounds?"
+    expected_keywords: ["Founders Fund"]
+    notes: "Founders Fund (4) ranks first per top-investors query."
+
+  - id: A4
+    category: aggregation
+    question: "What is the total amount raised across all Series A rounds?"
+    expected_keywords: ["Series A"]
+    notes: "6 Series A rounds totaling $212.3M. Hard for both approaches."
+
+  - id: A5
+    category: aggregation
+    question: "List all startups that have raised over $1 billion."
+    expected_keywords: ["OpenAI", "Anthropic", "Databricks", "Sierra"]
+    notes: "OpenAI/Anthropic/Databricks/Sierra/Coherent/CFS/ScaleAI qualify. Gold: 3+ of 4 listed."
+
+  # ==========================================================================
+  # CATEGORY 3 — MULTI-HOP (5)
+  # 2+ relationship traversals.
+  # ==========================================================================
+
+  - id: M1
+    category: multi_hop
+    question: "Which investors have funded both Anthropic and Replit?"
+    expected_keywords: ["Founders Fund"]
+    notes: "Founders Fund or GV both qualify per investor-portfolio."
+
+  - id: M2
+    category: multi_hop
+    question: "What technologies are used by OpenAI's products?"
+    expected_keywords: ["transformer"]
+    notes: "OpenAI -> ChatGPT/GPT-4 -> transformer, RAG, vector database, LangChain."
+
+  - id: M3
+    category: multi_hop
+    question: "Which companies use both RAG and vector databases?"
+    expected_keywords: ["Scale AI"]
+    notes: "Scale AI appears in both via multiple products."
+
+  - id: M4
+    category: multi_hop
+    question: "Who are the investors in the biggest Series B round?"
+    expected_keywords: ["Commonwealth Fusion"]
+    notes: "Biggest Series B = Commonwealth Fusion Systems $1.8B."
+
+  - id: M5
+    category: multi_hop
+    question: "What products does Anthropic make, and what technologies do they use?"
+    expected_keywords: ["Claude"]
+    notes: "Claude family of products; gold requires 'Claude' mentioned."
+
+  # ==========================================================================
+  # CATEGORY 4 — SEMANTIC (5)
+  # Open-ended, require reading article text. B's habitat.
+  # ==========================================================================
+
+  - id: S1
+    category: semantic
+    question: "What are AI coding startups saying about agent capabilities?"
+    expected_keywords: ["agent"]
+    notes: "B should retrieve Replit/Cursor/Augment. A has no text retrieval."
+
+  - id: S2
+    category: semantic
+    question: "What concerns have been raised about AI safety and alignment?"
+    expected_keywords: ["safety"]
+    notes: "Scale AI job postings mention RLHF/alignment. B should find these."
+
+  - id: S3
+    category: semantic
+    question: "Which startups are working on robotics or embodied AI?"
+    expected_keywords: []
+    notes: "Loose — Nvidia humanoid, VC Eclipse physical AI fund, etc. Manual review."
+
+  - id: S4
+    category: semantic
+    question: "What trends are visible in recent AI infrastructure investments?"
+    expected_keywords: []
+    notes: "Loose — Coherent/SiFive/Nous etc. Qualitative scoring."
+
+  - id: S5
+    category: semantic
+    question: "Are there any controversies or incidents involving AI coding tools?"
+    expected_keywords: []
+    notes: "Replit database-wipe articles. B should find; A cannot. Qualitative."
+
+  # ==========================================================================
+  # CATEGORY 5 — NARRATIVE (5)
+  # Synthesis over multiple documents. B-only in practice.
+  # ==========================================================================
+
+  - id: N1
+    category: narrative
+    question: "Summarize recent activity in the AI coding assistant space."
+    expected_keywords: ["Replit"]
+    notes: "Narrative over Replit/Cursor/Augment/Codex articles."
+
+  - id: N2
+    category: narrative
+    question: "Tell me about NVIDIA's investments and partnerships in AI."
+    expected_keywords: ["NVIDIA"]
+    notes: "NVIDIA invested in Coherent $2B; also partnership mentions."
+
+  - id: N3
+    category: narrative
+    question: "What is the state of voice AI and speech recognition startups?"
+    expected_keywords: ["AssemblyAI"]
+    notes: "7 AssemblyAI docs in graph. B should find; A cannot narrate."
+
+  - id: N4
+    category: narrative
+    question: "Give me an overview of Anthropic's product line and funding history."
+    expected_keywords: ["Claude", "Anthropic"]
+    notes: "Claude products + multiple rounds ($30B, $1.5B, $1B)."
+
+  - id: N5
+    category: narrative
+    question: "What's happening with enterprise AI deployment according to the news?"
+    expected_keywords: []
+    notes: "Microsoft/Azure/Replit partnerships. HUMAIN. Qualitative."

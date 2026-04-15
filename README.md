@@ -14,7 +14,7 @@ The system runs **fully locally** — text extraction and question-answering use
 | 1 | 1-2 | Data Collection + Classical Baselines | ✅ Complete |
 | 2 | 3-4 | LLM-based Knowledge Graph (Neo4j) | ✅ Complete |
 | 3 | 5-6 | KG-RAG Integration + Natural-language Q&A | ✅ Complete |
-| 4 | 7-8 | Evaluation + Report + Demo | 🔜 Planned |
+| 4 | 7-8 | Evaluation + Report + Demo | ✅ Complete |
 
 ---
 
@@ -56,7 +56,7 @@ sed -i '' 's/your_password_here/trendscout123/' .env       # macOS
 
 Verify everything is wired up:
 ```bash
-python -m pytest -q                                         # should print "169 passed"
+python -m pytest -q                                         # should print "189 passed"
 docker ps | grep trendscout-neo4j                           # container should be Up
 ollama list | grep llama3.1                                 # model should be present
 ```
@@ -279,6 +279,60 @@ All LLM-generated Cypher passes through `cypher_safety.validate_read_only()` bef
 | Semantic ("What are startups saying about agents?") | ❌ No text retrieval capability | ✅ Vector search finds relevant articles |
 | Latency (typical) | 8-20s (2 LLM calls) | 15-20s (1 embedding + 1 LLM call + graph queries) |
 
+---
+
+## Phase 4 — Comparative Evaluation
+
+Phase 4 benchmarks Approach A and Approach B head-to-head on a hand-curated set of 25 questions across five categories (factual lookup, aggregation, multi-hop, semantic, narrative). Both approaches implement the same `BaseQASystem` protocol so the same harness can score them uniformly.
+
+**Full report:** [`reports/phase4_findings.md`](reports/phase4_findings.md) — methodology, headline numbers, per-category breakdown, qualitative analysis of three illustrative failures, and conclusions. Suitable for inclusion in the project writeup.
+
+### Run the benchmark
+
+```bash
+# Full benchmark (25 questions × both approaches, ~15-20 minutes on llama3.1:8b)
+python scripts/run_benchmark.py 2>&1 | tee evaluation/benchmark_run.log
+
+# Generate the report
+python scripts/analyze_benchmark.py --output reports/phase4_findings.md
+python scripts/analyze_benchmark.py --detail --output reports/phase4_findings_detailed.md
+
+# Faster variants for iteration
+python scripts/run_benchmark.py --limit 5             # first 5 questions
+python scripts/run_benchmark.py --category aggregation # one category only
+python scripts/run_benchmark.py --approach A          # one approach only
+```
+
+### Headline result (15.2 minutes wall-clock, 50 LLM-driven inferences)
+
+| Metric | Approach A | Approach B |
+|---|---|---|
+| Answered rate | 96% | 100% |
+| Mean keyword coverage | 63% | 67% |
+| Mean latency | 21.6s | 15.0s |
+| Median latency | 15.1s | 14.5s |
+
+The headline near-tie disguises strong category specialization. Per-category margins ≥20% (full table in the report):
+
+| Category | Winner | Margin |
+|---|---|---|
+| aggregation | A | +25% |
+| multi_hop | A | +20% |
+| semantic | B | +20% |
+| narrative | B | +40% |
+
+**Bottom line:** the two paradigms are specialized rather than interchangeable. A wins on questions with structured answers (aggregations, multi-hop joins). B wins on questions requiring document understanding (semantic search, narrative synthesis). They tie on factual lookups. A composite system that routes by question type would likely outperform either alone.
+
+### Question set
+
+The 25 questions live in [`evaluation/eval_questions.yaml`](evaluation/eval_questions.yaml). Each carries expected keywords for automated scoring and notes describing what it tests. Examples:
+
+- *factual_lookup:* "Who invested in Replit?" → expects "Founders Fund", "GV", "Benchmark"
+- *aggregation:* "What are the 3 biggest funding rounds?" → expects "OpenAI", "50", "Anthropic", "30"
+- *narrative:* "Tell me about NVIDIA's investments and partnerships in AI." → expects "NVIDIA"
+
+---
+
 ### Known limitations (honest)
 1. **No `MAKES` vs `USES` distinction.** The LLM extracts both "Anthropic makes Claude" and "Replit uses Claude" under the same `ANNOUNCED` edge. Future work: split into `MAKES_PRODUCT` vs `USES_PRODUCT`.
 2. **Surface-form variants persist.** ~5 variants of "Scale Generative AI Platform" (SGP, Scale GP, Scale Generative Platform, etc.) live as distinct Product nodes. Future work: extend the normalizer alias table.
@@ -336,6 +390,15 @@ trendscout-ai/
 │       ├── embedder.py             # bge-base-en-v1.5 wrapper
 │       ├── vector_store.py         # Neo4j native vector index ops
 │       └── graph_rag.py            # Approach B pipeline
+│   └── evaluation/                 # Phase 4: benchmark + scoring
+│       ├── __init__.py
+│       └── scorer.py               # keyword/citation scoring + aggregates
+├── evaluation/                     # Phase 4 question set + benchmark outputs
+│   ├── eval_questions.yaml         # 25 questions × 5 categories
+│   └── results_*.json              # benchmark output (timestamped)
+├── reports/                        # Phase 4 final writeup
+│   ├── phase4_findings.md          # report-ready Markdown
+│   └── phase4_findings_detailed.md # full per-question answers
 ├── scripts/
 │   ├── run_scraper.py              # Phase 1
 │   ├── run_preprocessing.py        # Phase 1
@@ -346,7 +409,9 @@ trendscout-ai/
 │   ├── clean_kg.py                 # Phase 2 — surgical cleanup
 │   ├── run_kg_queries.py           # Phase 2 — demo queries
 │   ├── build_vector_index.py       # Phase 3 — embed docs into Neo4j
-│   └── run_qa_chat.py              # Phase 3 — interactive Q&A REPL
+│   ├── run_qa_chat.py              # Phase 3 — interactive Q&A REPL
+│   ├── run_benchmark.py            # Phase 4 — A vs B benchmark
+│   └── analyze_benchmark.py        # Phase 4 — pretty-print results
 └── tests/
     ├── test_scraper.py
     ├── test_preprocessing.py
@@ -355,12 +420,13 @@ trendscout-ai/
     ├── test_rag_step1.py           # safety + common types
     ├── test_rag_step2.py           # executor + generator + formatter
     ├── test_rag_step3.py           # embedder + vector store
-    └── test_rag_step4.py           # GraphRAG pipeline
+    ├── test_rag_step4.py           # GraphRAG pipeline
+    └── test_evaluation.py          # Phase 4 scorer
 ```
 
 ## Tests
 ```bash
-python -m pytest -q             # 169 tests, all passing
+python -m pytest -q             # 189 tests, all passing
 ```
 
 ## Team
