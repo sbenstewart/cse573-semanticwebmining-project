@@ -1,0 +1,2940 @@
+{
+  "metadata": {
+    "timestamp": "2026-04-15T12:34:04.550300",
+    "n_questions": 25,
+    "approach": "both",
+    "questions_path": "evaluation/eval_questions.yaml",
+    "total_runtime_seconds": 914.964791208
+  },
+  "questions": [
+    {
+      "id": "F1",
+      "category": "factual_lookup",
+      "question": "Who invested in Replit?",
+      "expected_keywords": [
+        "Founders Fund",
+        "GV",
+        "Benchmark"
+      ],
+      "notes": "5 investors; gold requires at least 3 of Founders Fund, GV, Benchmark, Tiger Global, Fidelity.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "F2",
+      "category": "factual_lookup",
+      "question": "How much did Anthropic raise in its Series C?",
+      "expected_keywords": [
+        "Anthropic",
+        "1.5",
+        "Series C"
+      ],
+      "notes": "Anthropic Series C 2023-02 for $1.5B. Exact-match on structured fact.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "F3",
+      "category": "factual_lookup",
+      "question": "What is OpenAI's largest funding round in the graph?",
+      "expected_keywords": [
+        "OpenAI",
+        "50"
+      ],
+      "notes": "OpenAI $50B Growth. Tests A's ORDER+LIMIT and B's top-article retrieval.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "F4",
+      "category": "factual_lookup",
+      "question": "Which companies did Founders Fund invest in?",
+      "expected_keywords": [
+        "Replit"
+      ],
+      "notes": "Per investor-portfolio: Replit, Augment Code, Anthropic. Gold: at least 1.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "F5",
+      "category": "factual_lookup",
+      "question": "What products has Scale AI announced?",
+      "expected_keywords": [
+        "SGP"
+      ],
+      "notes": "Scale AI has ~35 products incl. SGP, Donovan, GenAI Platform. Gold: at least 1.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "A1",
+      "category": "aggregation",
+      "question": "What are the 3 biggest funding rounds?",
+      "expected_keywords": [
+        "OpenAI",
+        "50",
+        "Anthropic",
+        "30"
+      ],
+      "notes": "Top 3: OpenAI $50B, Anthropic $30B, Databricks $20B. Known A failure.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "A2",
+      "category": "aggregation",
+      "question": "How many funding rounds are in the graph?",
+      "expected_keywords": [
+        "35"
+      ],
+      "notes": "Total FundingRound nodes = 35.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "A3",
+      "category": "aggregation",
+      "question": "Which investor appears in the most funding rounds?",
+      "expected_keywords": [
+        "Founders Fund"
+      ],
+      "notes": "Founders Fund (4) ranks first per top-investors query.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "A4",
+      "category": "aggregation",
+      "question": "What is the total amount raised across all Series A rounds?",
+      "expected_keywords": [
+        "Series A"
+      ],
+      "notes": "6 Series A rounds totaling $212.3M. Hard for both approaches.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "A5",
+      "category": "aggregation",
+      "question": "List all startups that have raised over $1 billion.",
+      "expected_keywords": [
+        "OpenAI",
+        "Anthropic",
+        "Databricks",
+        "Sierra"
+      ],
+      "notes": "OpenAI/Anthropic/Databricks/Sierra/Coherent/CFS/ScaleAI qualify. Gold: 3+ of 4 listed.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "M1",
+      "category": "multi_hop",
+      "question": "Which investors have funded both Anthropic and Replit?",
+      "expected_keywords": [
+        "Founders Fund"
+      ],
+      "notes": "Founders Fund or GV both qualify per investor-portfolio.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "M2",
+      "category": "multi_hop",
+      "question": "What technologies are used by OpenAI's products?",
+      "expected_keywords": [
+        "transformer"
+      ],
+      "notes": "OpenAI -> ChatGPT/GPT-4 -> transformer, RAG, vector database, LangChain.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "M3",
+      "category": "multi_hop",
+      "question": "Which companies use both RAG and vector databases?",
+      "expected_keywords": [
+        "Scale AI"
+      ],
+      "notes": "Scale AI appears in both via multiple products.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "M4",
+      "category": "multi_hop",
+      "question": "Who are the investors in the biggest Series B round?",
+      "expected_keywords": [
+        "Commonwealth Fusion"
+      ],
+      "notes": "Biggest Series B = Commonwealth Fusion Systems $1.8B.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "M5",
+      "category": "multi_hop",
+      "question": "What products does Anthropic make, and what technologies do they use?",
+      "expected_keywords": [
+        "Claude"
+      ],
+      "notes": "Claude family of products; gold requires 'Claude' mentioned.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "S1",
+      "category": "semantic",
+      "question": "What are AI coding startups saying about agent capabilities?",
+      "expected_keywords": [
+        "agent"
+      ],
+      "notes": "B should retrieve Replit/Cursor/Augment. A has no text retrieval.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "S2",
+      "category": "semantic",
+      "question": "What concerns have been raised about AI safety and alignment?",
+      "expected_keywords": [
+        "safety"
+      ],
+      "notes": "Scale AI job postings mention RLHF/alignment. B should find these.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "S3",
+      "category": "semantic",
+      "question": "Which startups are working on robotics or embodied AI?",
+      "expected_keywords": [],
+      "notes": "Loose \u2014 Nvidia humanoid, VC Eclipse physical AI fund, etc. Manual review.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "S4",
+      "category": "semantic",
+      "question": "What trends are visible in recent AI infrastructure investments?",
+      "expected_keywords": [],
+      "notes": "Loose \u2014 Coherent/SiFive/Nous etc. Qualitative scoring.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "S5",
+      "category": "semantic",
+      "question": "Are there any controversies or incidents involving AI coding tools?",
+      "expected_keywords": [],
+      "notes": "Replit database-wipe articles. B should find; A cannot. Qualitative.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "N1",
+      "category": "narrative",
+      "question": "Summarize recent activity in the AI coding assistant space.",
+      "expected_keywords": [
+        "Replit"
+      ],
+      "notes": "Narrative over Replit/Cursor/Augment/Codex articles.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "N2",
+      "category": "narrative",
+      "question": "Tell me about NVIDIA's investments and partnerships in AI.",
+      "expected_keywords": [
+        "NVIDIA"
+      ],
+      "notes": "NVIDIA invested in Coherent $2B; also partnership mentions.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "N3",
+      "category": "narrative",
+      "question": "What is the state of voice AI and speech recognition startups?",
+      "expected_keywords": [
+        "AssemblyAI"
+      ],
+      "notes": "7 AssemblyAI docs in graph. B should find; A cannot narrate.",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "N4",
+      "category": "narrative",
+      "question": "Give me an overview of Anthropic's product line and funding history.",
+      "expected_keywords": [
+        "Claude",
+        "Anthropic"
+      ],
+      "notes": "Claude products + multiple rounds ($30B, $1.5B, $1B).",
+      "expected_doc_ids": null
+    },
+    {
+      "id": "N5",
+      "category": "narrative",
+      "question": "What's happening with enterprise AI deployment according to the news?",
+      "expected_keywords": [],
+      "notes": "Microsoft/Azure/Replit partnerships. HUMAIN. Qualitative.",
+      "expected_doc_ids": null
+    }
+  ],
+  "answers": {
+    "text_to_cypher": [
+      {
+        "question": "Who invested in Replit?",
+        "text": "Founders Fund, Tiger Global, Fidelity Management & Research Company LLC, Benchmark, and GV invested in Replit.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 129433.02666700038,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup {normalized_name: 'replit'})-[:HAS_FUNDING_ROUND]->(r:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 44.196749999173335,
+              "rows_returned": 5
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "How much did Anthropic raise in its Series C?",
+        "text": "Anthropic raised $1,500,000,000 in its Series C.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 22328.16174999971,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup {normalized_name: 'anthropic'})-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.round_type = 'Series C' RETURN s.name AS startup, sum(r.amount_usd) AS total_usd",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 14.159083000777173,
+              "rows_returned": 1
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What is OpenAI's largest funding round in the graph?",
+        "text": "The query returned information about OpenAI's largest funding round, but this may not directly answer your question. The largest funding round for OpenAI in the graph is $50 billion, with no announced date provided.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 32108.7186249988,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (o:Startup {normalized_name: 'openai'})-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.amount_usd IS NOT NULL RETURN o.name AS startup, max(r.amount_usd) AS largest_amount ORDER BY r.amount_usd DESC LIMIT 1",
+              "gen_error": null,
+              "exec_error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: r (line 1, column 188 (offset: 187))\n\"MATCH (o:Startup {normalized_name: 'openai'})-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.amount_usd IS NOT NULL RETURN o.name AS startup, max(r.amount_usd) AS largest_amount ORDER BY r.amount_usd DESC LIMIT 1\"\n                                                                                                                                                                                            ^}",
+              "exec_latency_ms": 49.79954200098291,
+              "rows_returned": 0
+            },
+            {
+              "attempt": 2,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (o:Startup {normalized_name: 'openai'})-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.amount_usd IS NOT NULL WITH o, max(r.amount_usd) AS largest_amount MATCH (o)-[:HAS_FUNDING_ROUND]->(r2:FundingRound) WHERE r2.amount_usd = largest_amount RETURN o.name AS startup, r2.amount_raw AS amount, r2.announced_date AS date",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 128.53700000050594,
+              "rows_returned": 1
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Which companies did Founders Fund invest in?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 15120.171124999615,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (i:Investor {normalized_name: 'founders fund'})-[:INVESTED_BY]->(r:FundingRound)-[:HAS_FUNDING_ROUND]->(s:Startup) RETURN DISTINCT s.name AS startup",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 87.87762499923701,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What products has Scale AI announced?",
+        "text": "Scale AI has announced the following products:\n\n* Claude 3.5 Sonnet\n* GenAI financial forecasting model\n* TIME's Person of the Year AI experience\n* Report generation for multiple customized report templates\n* Agentic warfare and scenario planning\n* Donovan\n* SGP\n* Scale Generative AI Platform\n* Replit Agent\n* Scale GenAI Platform\n* GenAI Platform\n* RLXF\n* Agent RL training platform\n* Agent RL Training Building algorithms\n* Agent building product\n* Scale's data engine\n* Agent Reinforcement Learning Environments data vertical\n* Computer Using Agent (CUA) data\n* Claude 3.5\n* GenAI Evaluation Suite\n* Scale Generative Platform (SGP)\n* Generative AI Platform\n* Scale Data Engine\n* Humanity's Last Exam\n* Remote Labor Index\n* SWE-Bench Pro\n* GRC function\n* GenAI Data Engine\n* Scale GenerativeAI Platform (SGP)\n* Generative AI Data Engine\n* Agent Development Platform\n* Scale Generative AI Platform (SGP)\n* SciPredict\n* PropensityBench\n* Professional Reasoning Benchmark\n* SGP (Scale Generative AI Platform)",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 28979.94304200074,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup {normalized_name: 'scale ai'})-[:ANNOUNCED]->(p:Product) RETURN DISTINCT p.name AS product",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 52.67749999984517,
+              "rows_returned": 36
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What are the 3 biggest funding rounds?",
+        "text": "",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 19559.83104200095,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3",
+              "gen_error": null,
+              "exec_error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: f (line 1, column 97 (offset: 96))\n\"MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3\"\n                                                                                                 ^}",
+              "exec_latency_ms": 20.149916999798734,
+              "rows_returned": 0
+            },
+            {
+              "attempt": 2,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3",
+              "gen_error": null,
+              "exec_error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: f (line 1, column 97 (offset: 96))\n\"MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3\"\n                                                                                                 ^}",
+              "exec_latency_ms": 12.279250000574393,
+              "rows_returned": 0
+            }
+          ]
+        },
+        "error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: f (line 1, column 97 (offset: 96))\n\"MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3\"\n                                                                                                 ^}"
+      },
+      {
+        "question": "How many funding rounds are in the graph?",
+        "text": "There are 35 funding rounds in the graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 6753.945082999053,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "count all FundingRound nodes",
+              "cypher": "MATCH (f:FundingRound) RETURN COUNT(f) AS num_funding_rounds",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 84.79216599880601,
+              "rows_returned": 1
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Which investor appears in the most funding rounds?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 14766.725000001315,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (i:Investor)-[:INVESTED_BY]->(r:FundingRound) RETURN i.name AS investor, count(DISTINCT r) AS num_rounds ORDER BY num_rounds DESC LIMIT 1",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 89.44608400088327,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What is the total amount raised across all Series A rounds?",
+        "text": "The total amount raised across all Series A rounds is $212,300,000.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 8385.699999998906,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup)-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.round_type = 'Series A' RETURN sum(r.amount_usd) AS total_usd",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 45.9292909999931,
+              "rows_returned": 1
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "List all startups that have raised over $1 billion.",
+        "text": "Here is the list of startups that have raised over $1 billion:\n\n* Coherent\n* Scale AI\n* Sierra\n* Anthropic\n* OpenAI\n* Commonwealth Fusion Systems\n* Databricks\n* VC Eclipse",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 19437.339166999664,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup)-[:HAS_FUNDING_ROUND]->(r:FundingRound) WHERE r.amount_usd > 1000000000 RETURN DISTINCT s.name AS startup",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 55.66579100013769,
+              "rows_returned": 8
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Which investors have funded both Anthropic and Replit?",
+        "text": "The query returned the names of investors who have funded both Anthropic and Replit. The two investors are Founders Fund and GV.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 23758.19387499905,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (a:Startup {normalized_name: 'anthropic'})-[:HAS_FUNDING_ROUND]->(r1:FundingRound), (r1)-[:INVESTED_BY]->(i:Investor), (r2:FundingRound)<-[:HAS_FUNDING_ROUND]-(b:Startup {normalized_name: 'replit'}), (r2)-[:INVESTED_BY]->(j:Investor) WHERE i = j RETURN DISTINCT i.name AS investor",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 230.51220799970906,
+              "rows_returned": 2
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What technologies are used by OpenAI's products?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 13902.438207998784,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (p:Product)-[:USES_TECH]->(t:Technology)<-[:ANNOUNCED]-(s:Startup {normalized_name: 'openai'}) RETURN t.name AS technology",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 45.39458300132537,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Which companies use both RAG and vector databases?",
+        "text": "The query returned a list of startups that use both RAG and vector databases. This may not directly answer your question, as it only provides the names of companies that meet this criterion.\n\nHere is the list:\n\n1. Anthropic\n2. Scale AI\n3. AssemblyAI\n4. OpenAI\n5. Replit",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 14766.955125000095,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup)-[:ANNOUNCED]->(p1:Product)-[:USES_TECH]->(t1:Technology {normalized_name: 'rag'}), (s)-[:ANNOUNCED]->(p2:Product)-[:USES_TECH]->(t2:Technology {normalized_name: 'vector database'}) RETURN DISTINCT s.name AS startup",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 97.20308400028443,
+              "rows_returned": 5
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Who are the investors in the biggest Series B round?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 24354.004167000312,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup)-[:HAS_FUNDING_ROUND]->(r:FundingRound)<-[:INVESTED_BY]-(i:Investor) WHERE r.round_type = 'Series B' AND r.amount_usd IS NOT NULL RETURN DISTINCT i.name AS investor ORDER BY r.amount_usd DESC LIMIT 1",
+              "gen_error": null,
+              "exec_error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: r (line 1, column 192 (offset: 191))\n\"MATCH (s:Startup)-[:HAS_FUNDING_ROUND]->(r:FundingRound)<-[:INVESTED_BY]-(i:Investor) WHERE r.round_type = 'Series B' AND r.amount_usd IS NOT NULL RETURN DISTINCT i.name AS investor ORDER BY r.amount_usd DESC LIMIT 1\"\n                                                                                                                                                                                                ^}",
+              "exec_latency_ms": 17.16445900092367,
+              "rows_returned": 0
+            },
+            {
+              "attempt": 2,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup)-[:HAS_FUNDING_ROUND]->(r:FundingRound)<-[:INVESTED_BY]-(i:Investor) WHERE r.round_type = 'Series B' AND r.amount_usd IS NOT NULL WITH i, r ORDER BY r.amount_usd DESC LIMIT 1 RETURN DISTINCT i.name AS investor",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 139.27958400017815,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What products does Anthropic make, and what technologies do they use?",
+        "text": "Anthropic makes Claude Cowork, Claude Desktop, Claude Code, Claude 3.5 Sonnet, GPT-4o, and Claude 3.5. They use domain knowledge, transformer, RAG, vector database, terminal-based AI agent, large language models, and LangChain technologies.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 13805.828999998994,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (a:Startup {normalized_name: 'anthropic'})-[:ANNOUNCED]->(p:Product)-[:USES_TECH]->(t:Technology) RETURN p.name AS product, t.name AS technology",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 53.32187500061991,
+              "rows_returned": 17
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What are AI coding startups saying about agent capabilities?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 16280.509500000335,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (d:Document)-[:MENTIONS]->(p:Product {normalized_name: 'replit agent'})-[:USES_TECH]->(t:Technology {normalized_name: 'rlhf'}), (s:Startup)<-[:ANNOUNCED]-(p) RETURN DISTINCT s.name AS startup, d.title AS title",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 62.60266699973727,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What concerns have been raised about AI safety and alignment?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 5586.253667001074,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (t:Technology {normalized_name: 'ai safety'}), (t2:Technology {normalized_name: 'alignment'})-[:MENTIONS]->(d:Document) RETURN DISTINCT d.title AS title, d.doc_id AS doc_id",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 41.55712500141817,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Which startups are working on robotics or embodied AI?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 14368.466500000068,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (t:Technology {normalized_name: 'robotics'} OR t:Technology {normalized_name: 'embodied ai'})-[:USES_TECH]->(p:Product)-[:ANNOUNCED]->(s:Startup) RETURN DISTINCT s.name AS startup",
+              "gen_error": null,
+              "exec_error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: Invalid input 'OR': expected \")\" or \"WHERE\" (line 1, column 51 (offset: 50))\n\"MATCH (t:Technology {normalized_name: 'robotics'} OR t:Technology {normalized_name: 'embodied ai'})-[:USES_TECH]->(p:Product)-[:ANNOUNCED]->(s:Startup) RETURN DISTINCT s.name AS startup\"\n                                                   ^}",
+              "exec_latency_ms": 20.486041999902227,
+              "rows_returned": 0
+            },
+            {
+              "attempt": 2,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (t:Technology {normalized_name: 'robotics'})-[:USES_TECH]->(p:Product)-[:ANNOUNCED]->(s:Startup) WITH s MATCH (t2:Technology {normalized_name: 'embodied ai'})-[:USES_TECH]->(p2:Product)-[:ANNOUNCED]->(s2:Startup) WHERE s = s2 RETURN DISTINCT s.name AS startup",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 79.28225000068778,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What trends are visible in recent AI infrastructure investments?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 7944.689500000095,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "recent documents and funding rounds",
+              "cypher": "MATCH (d:Document {published_date: {gte: '2020-01-01'}})-[:MENTIONS]->(s:Startup), (i:Investor)<-[:INVESTED_BY]-(r:FundingRound) WHERE r.amount_usd IS NOT NULL RETURN s.name AS startup, i.name AS investor, r.round_type AS round_type ORDER BY r.announced_date DESC",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 52.19279100128915,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Are there any controversies or incidents involving AI coding tools?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 7290.474875000655,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (d:Document)-[:MENTIONS]->(p:Product {normalized_name: 'claude 3.5 sonnet'})-[:USES_TECH]->(t:Technology {normalized_name: 'ai'}) WHERE d.title CONTAINS 'controversy' OR d.title CONTAINS 'incident' RETURN DISTINCT p.name AS product, t.name AS technology",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 74.9063750008645,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Summarize recent activity in the AI coding assistant space.",
+        "text": "The query returned a list of investors in Replit's funding rounds, but this may not directly answer your question about recent activity in the AI coding assistant space. However, based on the provided information, here is what I found:\n\nReplit has received investments from several notable firms, including Founders Fund, Tiger Global, Fidelity Management & Research Company LLC, Benchmark, and GV.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 13719.259374998728,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (s:Startup {normalized_name: 'replit'})-[:HAS_FUNDING_ROUND]->(r:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 8.173374999387306,
+              "rows_returned": 5
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Tell me about NVIDIA's investments and partnerships in AI.",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 17831.17758300068,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (n:Startup {normalized_name: 'nvidia'})-[:HAS_FUNDING_ROUND]->(r:FundingRound)-[:INVESTED_BY]->(i:Investor), (n:Startup {normalized_name: 'nvidia'})-[:ANNOUNCED]->(p:Product)-[:USES_TECH]->(t:Technology) RETURN DISTINCT i.name AS investor, p.name AS product",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 85.33741700011888,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What is the state of voice AI and speech recognition startups?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 9591.943958001139,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (t:Technology {normalized_name: 'voice ai'})-[:USES_TECH]->(p:Product)-[:ANNOUNCED]->(s:Startup), (t2:Technology {normalized_name: 'speech recognition'})-[:USES_TECH]->(p2:Product)-[:ANNOUNCED]->(s2:Startup) RETURN s.name AS startup, p.name AS product",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 87.96254199842224,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "Give me an overview of Anthropic's product line and funding history.",
+        "text": "Anthropic's product line includes Claude Cowork, Claude Opus 4.6, Claude Mythos Preview, Claude Desktop, Claude Code, Anthropic AI model, Opus, Mythos, Claude 3.5 Sonnet, and Cowork.\n\nThe query returned funding information for these products, but this may not directly answer your question about the product line. The funding rounds include Series C ($1.5B) and Unknown amounts of $30 billion, $1.5B, $1B, $200M, and $100M.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 40174.39362500045,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (a:Startup {normalized_name: 'anthropic'})-[:ANNOUNCED]->(p:Product), (a)-[:HAS_FUNDING_ROUND]->(r:FundingRound) RETURN p.name AS product, r.amount_raw AS amount, r.round_type AS round_type ORDER BY r.amount_usd DESC",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 51.546749999033636,
+              "rows_returned": 60
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      },
+      {
+        "question": "What's happening with enterprise AI deployment according to the news?",
+        "text": "I couldn't find that information in the knowledge graph.",
+        "cited_doc_ids": [],
+        "approach": "text_to_cypher",
+        "latency_ms": 18719.57941599976,
+        "trace": {
+          "attempts": [
+            {
+              "attempt": 1,
+              "rationale": "direct schema lookup",
+              "cypher": "MATCH (d:Document)-[:MENTIONS]->(p:Product {normalized_name: 'enterprise ai deployment'}) RETURN d.doc_id AS doc_id, d.title AS title",
+              "gen_error": null,
+              "exec_error": null,
+              "exec_latency_ms": 41.96516600131872,
+              "rows_returned": 0
+            }
+          ],
+          "format_error": null
+        },
+        "error": null
+      }
+    ],
+    "graph_rag": [
+      {
+        "question": "Who invested in Replit?",
+        "text": "The investors mentioned in the knowledge graph are:\n\n* Benchmark\n* Amazon\n* Founders Fund\n* Tiger Global\n* Fidelity Management & Research Company LLC\n* GV",
+        "cited_doc_ids": [
+          "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "b1dda378-0670-4260-b6e3-47ec15ef7390",
+          "697550fc-59f1-4147-9032-0d340aaee0a4",
+          "ef5bc39a-fb5e-4d05-ac88-9fbaf35271fd"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 20842.394125000283,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+              "score": 0.8796741962432861,
+              "title": "Replit\u2019s Reported $9 Billion Valuation Highlights Investor Interest in AI Developer Tools"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.8603448271751404,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "b1dda378-0670-4260-b6e3-47ec15ef7390",
+              "score": 0.8578711748123169,
+              "title": "After nine years of grinding, Replit finally found its market. Can it keep it?"
+            },
+            {
+              "doc_id": "697550fc-59f1-4147-9032-0d340aaee0a4",
+              "score": 0.841896653175354,
+              "title": "125 Days, 750,000 Uses, One Realization: Some of Our AI Agents Are Now Truly Part of the Team. Replit v3 Was The First"
+            },
+            {
+              "doc_id": "ef5bc39a-fb5e-4d05-ac88-9fbaf35271fd",
+              "score": 0.8374775052070618,
+              "title": "Replit's CEO thinks AI will end soul-crushing corporate work \u2014 and bring entrepreneurship inside big companies"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4262
+        },
+        "error": null
+      },
+      {
+        "question": "How much did Anthropic raise in its Series C?",
+        "text": "The query returned information about Anthropic's funding rounds, but this may not directly answer your question. However, according to the retrieved context, Anthropic raised $1.5B in its Series C funding round.",
+        "cited_doc_ids": [
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "tec_20260410_82b94a27",
+          "tec_20260409_04de243c",
+          "ven_20260112_a102a18a",
+          "tec_20260408_cc2ebcc5"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 18086.78037500067,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.8326290845870972,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "tec_20260410_82b94a27",
+              "score": 0.8171813488006592,
+              "title": "Anthropic temporarily banned OpenClaw\u2019s creator from accessing Claude"
+            },
+            {
+              "doc_id": "tec_20260409_04de243c",
+              "score": 0.7998406291007996,
+              "title": "Is Anthropic limiting the release of Mythos to protect the internet \u2014 or Anthropic?"
+            },
+            {
+              "doc_id": "ven_20260112_a102a18a",
+              "score": 0.7997370958328247,
+              "title": "Anthropic launches Cowork, a Claude Desktop agent that works in your files \u2014 no coding required"
+            },
+            {
+              "doc_id": "tec_20260408_cc2ebcc5",
+              "score": 0.7858542203903198,
+              "title": "AWS boss explains why investing billions in both Anthropic and OpenAI is an OK conflict"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 6446
+        },
+        "error": null
+      },
+      {
+        "question": "What is OpenAI's largest funding round in the graph?",
+        "text": "The query returned facts about various startups, but this may not directly answer your question. However, according to the retrieved context, OpenAI's largest funding round is $50 billion (Growth).",
+        "cited_doc_ids": [
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "tec_20260407_cb723f1a",
+          "9950abbb-6481-4441-8d65-97240a76e862",
+          "0fbdb109-a61d-4b6d-96fe-10a0415b405c"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 9253.17404099951,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.8552961349487305,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.8303072452545166,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "tec_20260407_cb723f1a",
+              "score": 0.8288493752479553,
+              "title": "I can\u2019t help rooting for tiny open source AI model maker Arcee"
+            },
+            {
+              "doc_id": "9950abbb-6481-4441-8d65-97240a76e862",
+              "score": 0.8287456035614014,
+              "title": "BrainCheck: $13 Million Series A Raised To Scale AI-Enabled Cognitive Care Platform"
+            },
+            {
+              "doc_id": "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+              "score": 0.8285222053527832,
+              "title": "Replit\u2019s Reported $9 Billion Valuation Highlights Investor Interest in AI Developer Tools"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4475
+        },
+        "error": null
+      },
+      {
+        "question": "Which companies did Founders Fund invest in?",
+        "text": "I couldn't find that in the knowledge graph.",
+        "cited_doc_ids": [
+          "tec_20260409_f2773015",
+          "tec_20260407_d99426ec",
+          "tec_20260409_398acbe7",
+          "e9d2a85d-44c2-493b-9b50-61c7e21f67eb",
+          "5d8e9acd-3a95-4bce-9f97-201e9363caec"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 4740.378708000208,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "tec_20260409_f2773015",
+              "score": 0.8108845949172974,
+              "title": "Collide Capital raises $95M fund to back fintech, future-of-work startups"
+            },
+            {
+              "doc_id": "tec_20260407_d99426ec",
+              "score": 0.7983732223510742,
+              "title": "VC Eclipse has a new $1.3B fund to back \u2014 and build \u2014 \u2018physical AI\u2019 startups"
+            },
+            {
+              "doc_id": "tec_20260409_398acbe7",
+              "score": 0.789607584476471,
+              "title": "Amazon CEO takes aim at Nvidia, Intel, Starlink, more in annual shareholder letter"
+            },
+            {
+              "doc_id": "e9d2a85d-44c2-493b-9b50-61c7e21f67eb",
+              "score": 0.7893896102905273,
+              "title": "Most companies aren\u2019t seeing a return on AI investments. This tech CEO wants to change that"
+            },
+            {
+              "doc_id": "5d8e9acd-3a95-4bce-9f97-201e9363caec",
+              "score": 0.7840853929519653,
+              "title": "Co-founder of $29 billion AI startup: The No. 1 thing CEOs of successful companies do that most people don't"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3307
+        },
+        "error": null
+      },
+      {
+        "question": "What products has Scale AI announced?",
+        "text": "Scale AI has announced the following products:\n\n* Claude 3.5 Sonnet\n* GenAI financial forecasting model\n* TIME's Person of the Year AI experience\n* Report generation for multiple customized report templates\n* Agentic warfare and scenario planning\n* Donovan\n* SGP (Scale Generative AI Platform)\n* Replit Agent\n* Scale GenAI Platform\n* GenAI Platform\n* RLXF\n* Agent RL training platform",
+        "cited_doc_ids": [
+          "88cd7a5d-ef61-4399-893b-90536dad4d2a",
+          "4f785f14-5c10-47b6-b5f2-c14c226fdd0c",
+          "36dc1e33-40a9-42c8-a2e7-e34b771d8400",
+          "ea6e6b2d-1606-478b-9eb1-6a82233300fa",
+          "48a4738e-601c-44ba-ae12-18e9512b1ea5"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 14476.490041999568,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "88cd7a5d-ef61-4399-893b-90536dad4d2a",
+              "score": 0.855679988861084,
+              "title": "Product Designer, Enterprise"
+            },
+            {
+              "doc_id": "4f785f14-5c10-47b6-b5f2-c14c226fdd0c",
+              "score": 0.8494420647621155,
+              "title": "From Edge to Industry: How ASUS Helps Scale AI-Driven Operations Across Diverse Industrial Environments"
+            },
+            {
+              "doc_id": "36dc1e33-40a9-42c8-a2e7-e34b771d8400",
+              "score": 0.8437211513519287,
+              "title": "Red Hat and Telenor AI Factory Bring Scale, Sovereignty and Control to Production AI"
+            },
+            {
+              "doc_id": "ea6e6b2d-1606-478b-9eb1-6a82233300fa",
+              "score": 0.8430311679840088,
+              "title": "Software Engineer"
+            },
+            {
+              "doc_id": "48a4738e-601c-44ba-ae12-18e9512b1ea5",
+              "score": 0.8417544960975647,
+              "title": "Staff Machine Learning Research Scientist/ Engineer, Agents"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4609
+        },
+        "error": null
+      },
+      {
+        "question": "What are the 3 biggest funding rounds?",
+        "text": "The query returned information about various funding rounds, but this may not directly answer your question. However, based on the available data:\n\n* VC Eclipse has a $1.3B fund.\n* Antiverse raised $9.3M in Series A funding.\n* Oska Health received \u20ac11M in Seed funding.\n* Collide Capital raised a $95M fund.\n\nNote that OpenAI's $50 billion growth round is mentioned, but it is not clear if this is the largest funding round overall.",
+        "cited_doc_ids": [
+          "tec_20260407_d99426ec",
+          "81477fe0-d3fa-4a72-aff7-6700508eb020",
+          "dab597aa-cd99-43c6-ac2b-517e85bc45c0",
+          "tec_20260409_f2773015",
+          "tec_20260409_c7cfde92"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 13111.315499998454,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "tec_20260407_d99426ec",
+              "score": 0.7934213876724243,
+              "title": "VC Eclipse has a new $1.3B fund to back \u2014 and build \u2014 \u2018physical AI\u2019 startups"
+            },
+            {
+              "doc_id": "81477fe0-d3fa-4a72-aff7-6700508eb020",
+              "score": 0.7884269952774048,
+              "title": "Antiverse raises $9.3M Series A to scale AI-driven antibody discovery from Cardiff"
+            },
+            {
+              "doc_id": "dab597aa-cd99-43c6-ac2b-517e85bc45c0",
+              "score": 0.7875691652297974,
+              "title": "Oska Health: \u20ac11 Million Seed Funding Raised To Scale AI-Based Chronic Care Model"
+            },
+            {
+              "doc_id": "tec_20260409_f2773015",
+              "score": 0.7841578125953674,
+              "title": "Collide Capital raises $95M fund to back fintech, future-of-work startups"
+            },
+            {
+              "doc_id": "tec_20260409_c7cfde92",
+              "score": 0.7802945375442505,
+              "title": "How to make the Startup Battlefield Top 20 \u2014 and what every company gets regardless"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3473
+        },
+        "error": null
+      },
+      {
+        "question": "How many funding rounds are in the graph?",
+        "text": "There are 7 funding rounds in the knowledge graph.\n\n* Oska Health: \u20ac11M (Seed)\n* Replit: $20M (Series A)\n* Replit: $200M (Series C)\n* Cursor: $100M (Series A)\n* OpenAI: $50 billion (Growth)\n* VC Eclipse: $1.3B (Unknown)\n* Replit: $400M (Unknown)",
+        "cited_doc_ids": [
+          "dab597aa-cd99-43c6-ac2b-517e85bc45c0",
+          "697550fc-59f1-4147-9032-0d340aaee0a4",
+          "fb724707-3ddd-41c6-9b90-04319dcfc252",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "tec_20260407_d99426ec"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 13550.328541999988,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "dab597aa-cd99-43c6-ac2b-517e85bc45c0",
+              "score": 0.8040295839309692,
+              "title": "Oska Health: \u20ac11 Million Seed Funding Raised To Scale AI-Based Chronic Care Model"
+            },
+            {
+              "doc_id": "697550fc-59f1-4147-9032-0d340aaee0a4",
+              "score": 0.8005951046943665,
+              "title": "125 Days, 750,000 Uses, One Realization: Some of Our AI Agents Are Now Truly Part of the Team. Replit v3 Was The First"
+            },
+            {
+              "doc_id": "fb724707-3ddd-41c6-9b90-04319dcfc252",
+              "score": 0.7901012897491455,
+              "title": "From Zero to Replit Fluent: How 9 Apps and 500,000 Users Taught Me to How to \u2018Vibe\u2019 Apps Into Production"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.7829076051712036,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "tec_20260407_d99426ec",
+              "score": 0.7821215391159058,
+              "title": "VC Eclipse has a new $1.3B fund to back \u2014 and build \u2014 \u2018physical AI\u2019 startups"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4427
+        },
+        "error": null
+      },
+      {
+        "question": "Which investor appears in the most funding rounds?",
+        "text": "JPMorgan and Goldman Sachs both appear as investors, but only JPMorgan also appears as an investor for Collide Capital's $95M fund.",
+        "cited_doc_ids": [
+          "tec_20260409_f2773015",
+          "tec_20260407_d99426ec",
+          "tec_20260409_c7cfde92",
+          "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+          "e9d2a85d-44c2-493b-9b50-61c7e21f67eb"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 6772.157332999996,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "tec_20260409_f2773015",
+              "score": 0.7886608839035034,
+              "title": "Collide Capital raises $95M fund to back fintech, future-of-work startups"
+            },
+            {
+              "doc_id": "tec_20260407_d99426ec",
+              "score": 0.7856760025024414,
+              "title": "VC Eclipse has a new $1.3B fund to back \u2014 and build \u2014 \u2018physical AI\u2019 startups"
+            },
+            {
+              "doc_id": "tec_20260409_c7cfde92",
+              "score": 0.7846940755844116,
+              "title": "How to make the Startup Battlefield Top 20 \u2014 and what every company gets regardless"
+            },
+            {
+              "doc_id": "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+              "score": 0.7838977575302124,
+              "title": "Replit\u2019s Reported $9 Billion Valuation Highlights Investor Interest in AI Developer Tools"
+            },
+            {
+              "doc_id": "e9d2a85d-44c2-493b-9b50-61c7e21f67eb",
+              "score": 0.7836033701896667,
+              "title": "Most companies aren\u2019t seeing a return on AI investments. This tech CEO wants to change that"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3352
+        },
+        "error": null
+      },
+      {
+        "question": "What is the total amount raised across all Series A rounds?",
+        "text": "The query returned information about various funding rounds, but this may not directly answer your question. However, I can provide some relevant facts.\n\nAntiverse raised $9.3M in a Series A round.\nBrainCheck raised $13M in a Series A round.\nCursor raised $100M in a Series A round.\n\nI couldn't find the total amount raised across all Series A rounds.",
+        "cited_doc_ids": [
+          "81477fe0-d3fa-4a72-aff7-6700508eb020",
+          "b3a49f5e-7f7a-4ac1-b307-9e894eeed250",
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "9950abbb-6481-4441-8d65-97240a76e862"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 14490.575207999427,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "81477fe0-d3fa-4a72-aff7-6700508eb020",
+              "score": 0.7899706363677979,
+              "title": "Antiverse raises $9.3M Series A to scale AI-driven antibody discovery from Cardiff"
+            },
+            {
+              "doc_id": "b3a49f5e-7f7a-4ac1-b307-9e894eeed250",
+              "score": 0.7832432985305786,
+              "title": "How Vercel Hit $9.3B and Replit Hit $3B\u2026 After a Decade. The Long Paths to AI \u201cOvernight Success\u201d"
+            },
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.7791082859039307,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.7726584672927856,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "9950abbb-6481-4441-8d65-97240a76e862",
+              "score": 0.7696205973625183,
+              "title": "BrainCheck: $13 Million Series A Raised To Scale AI-Enabled Cognitive Care Platform"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4908
+        },
+        "error": null
+      },
+      {
+        "question": "List all startups that have raised over $1 billion.",
+        "text": "Based on the retrieved context, the following startups have raised over $1 billion:\n\n* Anthropic ($30 billion)\n* Replit ($400 million Series C and $200 million Series C)\n\nNote: The query returned information about funding rounds, but this may not directly answer your question. However, based on the available data, these two startups have collectively raised over $1 billion.",
+        "cited_doc_ids": [
+          "5d8e9acd-3a95-4bce-9f97-201e9363caec",
+          "66fc518e-1928-4698-adef-3092ea2aa0cb",
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "81477fe0-d3fa-4a72-aff7-6700508eb020"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 14429.93045899857,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "5d8e9acd-3a95-4bce-9f97-201e9363caec",
+              "score": 0.8261356353759766,
+              "title": "Co-founder of $29 billion AI startup: The No. 1 thing CEOs of successful companies do that most people don't"
+            },
+            {
+              "doc_id": "66fc518e-1928-4698-adef-3092ea2aa0cb",
+              "score": 0.813764214515686,
+              "title": "The CEO of vibe coding startup Replit reveals it'll hit $1B in revenue next year"
+            },
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.8121909499168396,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.8095038533210754,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "81477fe0-d3fa-4a72-aff7-6700508eb020",
+              "score": 0.8073673248291016,
+              "title": "Antiverse raises $9.3M Series A to scale AI-driven antibody discovery from Cardiff"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4841
+        },
+        "error": null
+      },
+      {
+        "question": "Which investors have funded both Anthropic and Replit?",
+        "text": "The query returned information about funding rounds for various startups, but this may not directly answer your question. However, based on the retrieved context, I found that the following investors have been mentioned as investing in both Anthropic and Replit:\n\n* Palo Alto Networks\n* Apple\n* Microsoft\n* CrowdStrike\n* AWS\n* Cisco\n* Linux Foundation\n* OpenAI\n* GV\n* Founders Fund \n\nThese investors are listed under the \"Investors\" section of the retrieved documents.",
+        "cited_doc_ids": [
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "tec_20260408_cc2ebcc5",
+          "ddfe9c80-4c5b-4951-8aa3-bf370f1e4771"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 20105.86974999933,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.8585687875747681,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "0fbdb109-a61d-4b6d-96fe-10a0415b405c",
+              "score": 0.8403403759002686,
+              "title": "Replit\u2019s Reported $9 Billion Valuation Highlights Investor Interest in AI Developer Tools"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.8312804102897644,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "tec_20260408_cc2ebcc5",
+              "score": 0.8206682205200195,
+              "title": "AWS boss explains why investing billions in both Anthropic and OpenAI is an OK conflict"
+            },
+            {
+              "doc_id": "ddfe9c80-4c5b-4951-8aa3-bf370f1e4771",
+              "score": 0.8094948530197144,
+              "title": "12 Videos from CVAI: Amjad Masad from Replit, Mike Krieger from Anthropic, xAI co-founder Jimmy Ba & More"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 5976
+        },
+        "error": null
+      },
+      {
+        "question": "What technologies are used by OpenAI's products?",
+        "text": "The query returned information about various startups and their technologies, but this may not directly answer your question. However, according to the retrieved context, some of OpenAI's products use the following technologies:\n\n* GPT-4o uses large language models.\n* ChatGPT Pro is a chatbot.\n\nNote that the specific technologies used by each product are not explicitly stated in the retrieved context.",
+        "cited_doc_ids": [
+          "b2dfb1b1-3206-4e48-b1ce-33af126a4fd4",
+          "d4fbf9dc-731f-47a5-ac03-c160ea658fc5",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "tec_20260407_cb723f1a",
+          "a63a0ec7-1b46-49ad-b491-61baf88de781"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 15646.822624999913,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "b2dfb1b1-3206-4e48-b1ce-33af126a4fd4",
+              "score": 0.8435888290405273,
+              "title": "McKinsey and OpenAI scale AI-driven transformations with new Frontier Alliance"
+            },
+            {
+              "doc_id": "d4fbf9dc-731f-47a5-ac03-c160ea658fc5",
+              "score": 0.8294909596443176,
+              "title": "AssemblyAI releases Conformer-1 API, the SOTA Speech Recognition Model"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.8208016157150269,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "tec_20260407_cb723f1a",
+              "score": 0.8113466501235962,
+              "title": "I can\u2019t help rooting for tiny open source AI model maker Arcee"
+            },
+            {
+              "doc_id": "a63a0ec7-1b46-49ad-b491-61baf88de781",
+              "score": 0.8074953556060791,
+              "title": "AssemblyAI Introduces Its Next-Gen Speech AI Models & What Sets Them Apart (Big CX Update 2024)"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4531
+        },
+        "error": null
+      },
+      {
+        "question": "Which companies use both RAG and vector databases?",
+        "text": "The query returned information about the technologies used by Replit, but this may not directly answer your question. However, based on the retrieved context, Replit uses both RAG and a vector database.\n\nAdditionally, another source mentions that Google and Replit are expanding their partnership to bring vibe coding to more companies, which implies that Google is also using these technologies in some capacity.",
+        "cited_doc_ids": [
+          "345a97ae-49cf-43fb-898c-7ac4d9df3626",
+          "4776c2fb-2a6a-4030-8bba-3be16d3b82bb",
+          "b68014d3-7cf3-4ea7-8adb-6bc91acce602",
+          "4da4d218-46cf-4bf1-b558-63424137250f",
+          "7bc452ad-bfe1-43e2-ae9e-4da536bdd4fd"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 14684.314291000192,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "345a97ae-49cf-43fb-898c-7ac4d9df3626",
+              "score": 0.8091126084327698,
+              "title": "Azure Vibe Coding for the Enterprise Masses: Microsoft Partners with Replit"
+            },
+            {
+              "doc_id": "4776c2fb-2a6a-4030-8bba-3be16d3b82bb",
+              "score": 0.7810256481170654,
+              "title": "Google and Replit expand partnership in push to bring vibe coding to more companies"
+            },
+            {
+              "doc_id": "b68014d3-7cf3-4ea7-8adb-6bc91acce602",
+              "score": 0.7793442010879517,
+              "title": "Replit and Microsoft Azure enable enterprise software building for every Hexaware employee"
+            },
+            {
+              "doc_id": "4da4d218-46cf-4bf1-b558-63424137250f",
+              "score": 0.7768344879150391,
+              "title": "Replit grabs $400M at $9B valuation in the AI coding race with OpenAI and Cursor"
+            },
+            {
+              "doc_id": "7bc452ad-bfe1-43e2-ae9e-4da536bdd4fd",
+              "score": 0.7744606733322144,
+              "title": "Vibe coding platform Replit's latest update is infuriating customers with surprise cost overruns"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 5025
+        },
+        "error": null
+      },
+      {
+        "question": "Who are the investors in the biggest Series B round?",
+        "text": "I couldn't find that in the knowledge graph. The query returned information about funding rounds and investors, but it does not mention a \"biggest Series B round\".",
+        "cited_doc_ids": [
+          "6b06b3d7-27d3-4b52-ba11-232e090fd08b",
+          "81477fe0-d3fa-4a72-aff7-6700508eb020",
+          "2f6a474e-a8ab-4ab1-af75-36a9c82b24ca",
+          "tec_20260409_398acbe7",
+          "tec_20260409_c7cfde92"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 6880.8255000003555,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "6b06b3d7-27d3-4b52-ba11-232e090fd08b",
+              "score": 0.7933473587036133,
+              "title": "Nasdaq-listed AI chipmaker Blaize bets on India for sovereign edge inference growth"
+            },
+            {
+              "doc_id": "81477fe0-d3fa-4a72-aff7-6700508eb020",
+              "score": 0.7932294011116028,
+              "title": "Antiverse raises $9.3M Series A to scale AI-driven antibody discovery from Cardiff"
+            },
+            {
+              "doc_id": "2f6a474e-a8ab-4ab1-af75-36a9c82b24ca",
+              "score": 0.7787332534790039,
+              "title": "Nvidia Pours $4B Into Photonics To Scale AI Data Centers\uff5cDaily News Digest\uff5c2026-03-03\uff5cweb only"
+            },
+            {
+              "doc_id": "tec_20260409_398acbe7",
+              "score": 0.7783985137939453,
+              "title": "Amazon CEO takes aim at Nvidia, Intel, Starlink, more in annual shareholder letter"
+            },
+            {
+              "doc_id": "tec_20260409_c7cfde92",
+              "score": 0.7759405374526978,
+              "title": "How to make the Startup Battlefield Top 20 \u2014 and what every company gets regardless"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3315
+        },
+        "error": null
+      },
+      {
+        "question": "What products does Anthropic make, and what technologies do they use?",
+        "text": "Anthropic makes the following products:\n\n* Claude Cowork\n* Claude Opus 4.6\n* Claude Mythos Preview\n* Claude Desktop\n* Claude Code\n* Anthropic AI model\n* Opus\n* Mythos\n* Claude 3.5 Sonnet\n* GPT-4o\n\nAnthropic uses the following technologies:\n\n* Domain knowledge\n* Transformer\n* RAG (Reactive Attention Generator)\n* Vector database\n* Terminal-based AI agent\n* LangChain\n* Large language models",
+        "cited_doc_ids": [
+          "ven_20260112_a102a18a",
+          "tec_20260409_04de243c",
+          "tec_20260410_82b94a27",
+          "tec_20260412_72ce90ad",
+          "tec_20260408_cc2ebcc5"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 21029.601000000184,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "ven_20260112_a102a18a",
+              "score": 0.8364827632904053,
+              "title": "Anthropic launches Cowork, a Claude Desktop agent that works in your files \u2014 no coding required"
+            },
+            {
+              "doc_id": "tec_20260409_04de243c",
+              "score": 0.8327566981315613,
+              "title": "Is Anthropic limiting the release of Mythos to protect the internet \u2014 or Anthropic?"
+            },
+            {
+              "doc_id": "tec_20260410_82b94a27",
+              "score": 0.8321532011032104,
+              "title": "Anthropic temporarily banned OpenClaw\u2019s creator from accessing Claude"
+            },
+            {
+              "doc_id": "tec_20260412_72ce90ad",
+              "score": 0.7994867563247681,
+              "title": "At the HumanX conference, everyone was talking about Claude"
+            },
+            {
+              "doc_id": "tec_20260408_cc2ebcc5",
+              "score": 0.7899770140647888,
+              "title": "AWS boss explains why investing billions in both Anthropic and OpenAI is an OK conflict"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 6189
+        },
+        "error": null
+      },
+      {
+        "question": "What are AI coding startups saying about agent capabilities?",
+        "text": "The query returned information about various AI startups and their products, but this may not directly answer your question. However, it mentions \"agent capabilities\" in the context of Replit Agent, a product mentioned in several sources. \n\nReplit Agent is listed as one of the products of Replit, along with other products like Replit V3 and Siraj. It's also mentioned alongside other AI coding assistants like Cursor IDE and Augment Code.\n\nIn terms of specific statements about agent capabilities, I couldn't find any direct quotes or descriptions in the retrieved documents.",
+        "cited_doc_ids": [
+          "81c7fbf0-2441-47d9-a015-227e007195dd",
+          "fededad5-2c26-4064-b7e0-ce42ec274a68",
+          "c5c84c2f-b09c-49d5-b33a-d21143031640",
+          "601cefd7-2e08-453e-93a4-2f92a57949b9",
+          "95623f37-8997-4d82-a090-18d0687a7988"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 21851.32650000014,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "81c7fbf0-2441-47d9-a015-227e007195dd",
+              "score": 0.857795774936676,
+              "title": "Replit Agent vs. Cursor vs. Augment Code: Which AI Coding Assistant Scales for Enterprises?"
+            },
+            {
+              "doc_id": "fededad5-2c26-4064-b7e0-ce42ec274a68",
+              "score": 0.8486316204071045,
+              "title": "Machine Learning Research Engineer, Agent Data Foundation"
+            },
+            {
+              "doc_id": "c5c84c2f-b09c-49d5-b33a-d21143031640",
+              "score": 0.8425644040107727,
+              "title": "Machine Learning Research Engineer, Agents"
+            },
+            {
+              "doc_id": "601cefd7-2e08-453e-93a4-2f92a57949b9",
+              "score": 0.8377541303634644,
+              "title": "AI-powered coding tool wiped out a software company\u2019s database in \u2018catastrophic failure\u2019"
+            },
+            {
+              "doc_id": "95623f37-8997-4d82-a090-18d0687a7988",
+              "score": 0.8358443379402161,
+              "title": "Engineering Manager, AgentOps"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 5137
+        },
+        "error": null
+      },
+      {
+        "question": "What concerns have been raised about AI safety and alignment?",
+        "text": "I couldn't find that in the knowledge graph.",
+        "cited_doc_ids": [
+          "e5256f44-94c6-451d-a241-46583d9dca89",
+          "f8d3913a-62bf-4e2c-936e-70a5a5e1cd3b",
+          "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+          "1d38bf0d-6318-4c6e-80e9-9ace8a2ce883",
+          "15345e3c-f906-49f2-a51c-0d56ea650aed"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 9503.768750000745,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "e5256f44-94c6-451d-a241-46583d9dca89",
+              "score": 0.8281349539756775,
+              "title": "If AI GTM Tools Were Half as Good As Cursor or Replit, It Would Be a Different World Today. They Will Get There."
+            },
+            {
+              "doc_id": "f8d3913a-62bf-4e2c-936e-70a5a5e1cd3b",
+              "score": 0.8244365453720093,
+              "title": "Your Enterprise AI Governance Deserves a \"Participation Trophy\": And That's a Trillion-Dollar Problem"
+            },
+            {
+              "doc_id": "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+              "score": 0.823444128036499,
+              "title": "RELY: New leadership drives AI-powered growth, product innovation, and global expansion"
+            },
+            {
+              "doc_id": "1d38bf0d-6318-4c6e-80e9-9ace8a2ce883",
+              "score": 0.8233466148376465,
+              "title": "AI coding platform goes rogue during code freeze and deletes entire company database \u2014 Replit CEO apologizes after AI engine says it 'made a catastrophic error in judgment' and 'destroyed all producti"
+            },
+            {
+              "doc_id": "15345e3c-f906-49f2-a51c-0d56ea650aed",
+              "score": 0.8211880922317505,
+              "title": "Profits before people: How neoliberalism is hardwiring AI for chaos"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4787
+        },
+        "error": null
+      },
+      {
+        "question": "Which startups are working on robotics or embodied AI?",
+        "text": "The query returned information about job openings at Scale AI, but this may not directly answer your question.\n\nHowever, I found a mention of \"physical AI\" in the TechCrunch article, which might be related to robotics or embodied AI. According to the article, VC Eclipse has a new $1.3B fund to back startups working on physical AI.",
+        "cited_doc_ids": [
+          "aba793e6-693d-49e3-8a6f-bdeab78a3ba1",
+          "3a2c18a4-616e-44fa-a503-bcd98693ecae",
+          "0a53e83f-0f10-47d5-a15b-8398a07d237b",
+          "f8f55314-d855-4259-b42a-ffb9a218b6e9",
+          "tec_20260407_d99426ec"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 11007.757208999465,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "aba793e6-693d-49e3-8a6f-bdeab78a3ba1",
+              "score": 0.8365139365196228,
+              "title": "Software Engineer, Robotics"
+            },
+            {
+              "doc_id": "3a2c18a4-616e-44fa-a503-bcd98693ecae",
+              "score": 0.8341326117515564,
+              "title": "Software Engineer, Robotics & Autonomous Systems"
+            },
+            {
+              "doc_id": "0a53e83f-0f10-47d5-a15b-8398a07d237b",
+              "score": 0.8254132866859436,
+              "title": "ML Systems Engineer, Robotics"
+            },
+            {
+              "doc_id": "f8f55314-d855-4259-b42a-ffb9a218b6e9",
+              "score": 0.8231861591339111,
+              "title": "Senior Machine Learning Engineer, Computer Vision"
+            },
+            {
+              "doc_id": "tec_20260407_d99426ec",
+              "score": 0.8229057788848877,
+              "title": "VC Eclipse has a new $1.3B fund to back \u2014 and build \u2014 \u2018physical AI\u2019 startups"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 2530
+        },
+        "error": null
+      },
+      {
+        "question": "What trends are visible in recent AI infrastructure investments?",
+        "text": "The query returned information about specific startups and investments, but this may not directly answer your question. However, some trends can be inferred from the retrieved context:\n\n* NVIDIA invested $2 billion in Coherent to scale AI data center infrastructure.\n* SubcontractorHub secured an eight-figure growth investment to scale its AI-driven residential construction operating system.\n\nThese examples suggest that there is a trend of significant investments in AI infrastructure and startups working on AI-related technologies.",
+        "cited_doc_ids": [
+          "4b9521c5-7d1b-41a5-9a66-79689348bcb0",
+          "f8d59a37-a185-448d-88f7-8d146a5611af",
+          "b022210e-50d9-47b5-9d2a-df04ed610041",
+          "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+          "d3f130d9-05bc-443d-baa1-c8ff13e3b381"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 13721.182707999105,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "4b9521c5-7d1b-41a5-9a66-79689348bcb0",
+              "score": 0.8565385341644287,
+              "title": "NVIDIA: $2 Billion Investment In Coherent To Scale AI Data Center Infrastructure"
+            },
+            {
+              "doc_id": "f8d59a37-a185-448d-88f7-8d146a5611af",
+              "score": 0.8542909622192383,
+              "title": "SubcontractorHub: Eight-Figure Growth Investment Secured To Scale AI-Driven Residential Construction Operating System"
+            },
+            {
+              "doc_id": "b022210e-50d9-47b5-9d2a-df04ed610041",
+              "score": 0.8490752577781677,
+              "title": "AI growth depends on Data Center Interconnect: Why DWDM enables scalable, cost-controlled expansion"
+            },
+            {
+              "doc_id": "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+              "score": 0.8485040664672852,
+              "title": "RELY: New leadership drives AI-powered growth, product innovation, and global expansion"
+            },
+            {
+              "doc_id": "d3f130d9-05bc-443d-baa1-c8ff13e3b381",
+              "score": 0.8463013172149658,
+              "title": "Latent AI Receives Investment From AUM Ventures to Internationally Scale AI Solutions at the Edge"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3155
+        },
+        "error": null
+      },
+      {
+        "question": "Are there any controversies or incidents involving AI coding tools?",
+        "text": "Yes, there is a reported incident of an AI-powered coding tool causing a \"catastrophic failure\" that wiped out a software company's database. The Replit CEO apologized for the incident, stating that their AI engine made a catastrophic error in judgment and destroyed all production data. \n\nThis information comes from two news articles: \"AI-powered coding tool wiped out a software company\u2019s database in \u2018catastrophic failure\u2019\" (Google News / Various, 2025-07-23T07:00:00+00:00) and \"AI coding platform goes rogue during code freeze and deletes entire company database \u2014 Replit CEO apologizes after AI engine says it 'made a catastrophic error in judgment' and 'destroyed all producti\" (Google News / Various, 2025-07-21T07:00:00+00:00).",
+        "cited_doc_ids": [
+          "601cefd7-2e08-453e-93a4-2f92a57949b9",
+          "1d38bf0d-6318-4c6e-80e9-9ace8a2ce883",
+          "81c7fbf0-2441-47d9-a015-227e007195dd",
+          "2b1fbda5-1d9c-4335-8a0a-fe48eb4d901c",
+          "e5256f44-94c6-451d-a241-46583d9dca89"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 24276.08683299877,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "601cefd7-2e08-453e-93a4-2f92a57949b9",
+              "score": 0.857296347618103,
+              "title": "AI-powered coding tool wiped out a software company\u2019s database in \u2018catastrophic failure\u2019"
+            },
+            {
+              "doc_id": "1d38bf0d-6318-4c6e-80e9-9ace8a2ce883",
+              "score": 0.8515654802322388,
+              "title": "AI coding platform goes rogue during code freeze and deletes entire company database \u2014 Replit CEO apologizes after AI engine says it 'made a catastrophic error in judgment' and 'destroyed all producti"
+            },
+            {
+              "doc_id": "81c7fbf0-2441-47d9-a015-227e007195dd",
+              "score": 0.8352022767066956,
+              "title": "Replit Agent vs. Cursor vs. Augment Code: Which AI Coding Assistant Scales for Enterprises?"
+            },
+            {
+              "doc_id": "2b1fbda5-1d9c-4335-8a0a-fe48eb4d901c",
+              "score": 0.8272584080696106,
+              "title": "Replit Showcases No-Code iOS App Build to Highlight AI-Driven Development Capabilities"
+            },
+            {
+              "doc_id": "e5256f44-94c6-451d-a241-46583d9dca89",
+              "score": 0.8261831402778625,
+              "title": "If AI GTM Tools Were Half as Good As Cursor or Replit, It Would Be a Different World Today. They Will Get There."
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4866
+        },
+        "error": null
+      },
+      {
+        "question": "Summarize recent activity in the AI coding assistant space.",
+        "text": "The query returned information about AssemblyAI and Replit, but this may not directly answer your question. \n\nAssemblyAI has released several products, including Conformer-1 API, a SOTA Speech Recognition Model (Source: \"AssemblyAI releases Conformer-1 API, the SOTA Speech Recognition Model\", Google News / Various). They have also developed other technologies such as vector database and transformer.\n\nReplit has showcased no-code iOS app build capabilities using AI-driven development (Source: \"Replit Showcases No-Code iOS App Build to Highlight AI-Driven Development Capabilities\", Google News / Various).",
+        "cited_doc_ids": [
+          "89aaccca-9cd5-45d1-ae9a-483d771cc3f6",
+          "2083bdcc-1a37-4d20-9fe9-e40936811c77",
+          "d4fbf9dc-731f-47a5-ac03-c160ea658fc5",
+          "2b1fbda5-1d9c-4335-8a0a-fe48eb4d901c",
+          "2cbc9674-1a96-4958-88c0-c0be14e5587d"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 16905.279874999906,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "89aaccca-9cd5-45d1-ae9a-483d771cc3f6",
+              "score": 0.8227745294570923,
+              "title": "Senior Software Engineer, AI Data"
+            },
+            {
+              "doc_id": "2083bdcc-1a37-4d20-9fe9-e40936811c77",
+              "score": 0.8226860761642456,
+              "title": "Senior Software Engineer, Go"
+            },
+            {
+              "doc_id": "d4fbf9dc-731f-47a5-ac03-c160ea658fc5",
+              "score": 0.821725070476532,
+              "title": "AssemblyAI releases Conformer-1 API, the SOTA Speech Recognition Model"
+            },
+            {
+              "doc_id": "2b1fbda5-1d9c-4335-8a0a-fe48eb4d901c",
+              "score": 0.8204010128974915,
+              "title": "Replit Showcases No-Code iOS App Build to Highlight AI-Driven Development Capabilities"
+            },
+            {
+              "doc_id": "2cbc9674-1a96-4958-88c0-c0be14e5587d",
+              "score": 0.82010817527771,
+              "title": "Senior Support Engineer"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 5075
+        },
+        "error": null
+      },
+      {
+        "question": "Tell me about NVIDIA's investments and partnerships in AI.",
+        "text": "NVIDIA has invested $2 billion in Coherent to scale AI data center infrastructure. They have also partnered with Lumentum to develop state-of-the-art optics technology. Additionally, they have invested $4 billion into photonics to scale AI data centers. \n\nNote: The query returned information about NVIDIA's investments and partnerships, but this may not directly answer your question as it focuses on specific areas of investment rather than a comprehensive overview of NVIDIA's efforts in AI.",
+        "cited_doc_ids": [
+          "4b9521c5-7d1b-41a5-9a66-79689348bcb0",
+          "2f6a474e-a8ab-4ab1-af75-36a9c82b24ca",
+          "1e2d7a73-064e-45e2-bd6c-be4ba49ac830",
+          "bd64a867-e53c-4453-a5de-fbf08b73765c",
+          "tec_20260409_398acbe7"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 11031.537708999167,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "4b9521c5-7d1b-41a5-9a66-79689348bcb0",
+              "score": 0.8959163427352905,
+              "title": "NVIDIA: $2 Billion Investment In Coherent To Scale AI Data Center Infrastructure"
+            },
+            {
+              "doc_id": "2f6a474e-a8ab-4ab1-af75-36a9c82b24ca",
+              "score": 0.881712794303894,
+              "title": "Nvidia Pours $4B Into Photonics To Scale AI Data Centers\uff5cDaily News Digest\uff5c2026-03-03\uff5cweb only"
+            },
+            {
+              "doc_id": "1e2d7a73-064e-45e2-bd6c-be4ba49ac830",
+              "score": 0.8726919293403625,
+              "title": "NVIDIA and Partners Show That Software-Defined AI-RAN Is the Next Wireless Generation"
+            },
+            {
+              "doc_id": "bd64a867-e53c-4453-a5de-fbf08b73765c",
+              "score": 0.8724768757820129,
+              "title": "NVIDIA Announces Strategic Partnership With Lumentum to Develop State-of-the-Art Optics Technology"
+            },
+            {
+              "doc_id": "tec_20260409_398acbe7",
+              "score": 0.8527548313140869,
+              "title": "Amazon CEO takes aim at Nvidia, Intel, Starlink, more in annual shareholder letter"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 3153
+        },
+        "error": null
+      },
+      {
+        "question": "What is the state of voice AI and speech recognition startups?",
+        "text": "The query returned information about AssemblyAI, a startup in the voice AI and speech recognition space. However, it does not directly answer your question about the state of voice AI and speech recognition startups.\n\nThat being said, based on the retrieved context, we can see that AssemblyAI has developed several products related to voice intelligence, including Claude 3.5 Sonnet, GPT-4o, Universal-Streaming, Conformer-1 API, Universal-1, and AssemblyAI Universal-1. These products utilize technologies such as vector databases, transformers, RAG, LangChain, and large language models.\n\nIt's worth noting that the funding rounds for AssemblyAI are listed as $115M (Unknown) and $28M (Unknown), but no specific information is provided about other voice AI or speech recognition startups.",
+        "cited_doc_ids": [
+          "df5c9321-2f1a-40f0-b14c-ac1200431334",
+          "3982663a-ce55-449a-b208-0346677b3d0c",
+          "2083bdcc-1a37-4d20-9fe9-e40936811c77",
+          "366b2514-4f6a-4556-8b42-97755cd549b6",
+          "954ab277-729b-4a62-815a-d1c085909674"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 22448.76325000041,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "df5c9321-2f1a-40f0-b14c-ac1200431334",
+              "score": 0.8722800612449646,
+              "title": "Start building voice intelligence with AssemblyAI\u2019s speech-to-text model from AWS Marketplace"
+            },
+            {
+              "doc_id": "3982663a-ce55-449a-b208-0346677b3d0c",
+              "score": 0.8646835088729858,
+              "title": "Applied AI Engineer"
+            },
+            {
+              "doc_id": "2083bdcc-1a37-4d20-9fe9-e40936811c77",
+              "score": 0.8618983030319214,
+              "title": "Senior Software Engineer, Go"
+            },
+            {
+              "doc_id": "366b2514-4f6a-4556-8b42-97755cd549b6",
+              "score": 0.8600020408630371,
+              "title": "Senior Researcher"
+            },
+            {
+              "doc_id": "954ab277-729b-4a62-815a-d1c085909674",
+              "score": 0.8592236042022705,
+              "title": "Senior Technical Account Manager"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 5135
+        },
+        "error": null
+      },
+      {
+        "question": "Give me an overview of Anthropic's product line and funding history.",
+        "text": "Anthropic has developed several products, including Claude Cowork, Claude Opus 4.6, Claude Mythos Preview, Claude Desktop, Claude Code, and the Anthropic AI model. They also have a product called Opus and another called Mythos.\n\nAs for funding, Anthropic has received various amounts from investors, including $200M (Unknown), $100M (Unknown), $30 billion (Growth), and $1.5B (Series C).",
+        "cited_doc_ids": [
+          "tec_20260410_82b94a27",
+          "141c4b96-4046-4646-9a0b-94b22f65ee42",
+          "ven_20260112_a102a18a",
+          "tec_20260408_cc2ebcc5",
+          "tec_20260409_04de243c"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 23091.888041999482,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "tec_20260410_82b94a27",
+              "score": 0.8474867343902588,
+              "title": "Anthropic temporarily banned OpenClaw\u2019s creator from accessing Claude"
+            },
+            {
+              "doc_id": "141c4b96-4046-4646-9a0b-94b22f65ee42",
+              "score": 0.8473272323608398,
+              "title": "Anthropic, Replit, And Higgsfield AI Raise Over $13 Billion, XR\u2019s Viture, Mojo Vision, Raise $175 Million"
+            },
+            {
+              "doc_id": "ven_20260112_a102a18a",
+              "score": 0.8369326591491699,
+              "title": "Anthropic launches Cowork, a Claude Desktop agent that works in your files \u2014 no coding required"
+            },
+            {
+              "doc_id": "tec_20260408_cc2ebcc5",
+              "score": 0.8363509774208069,
+              "title": "AWS boss explains why investing billions in both Anthropic and OpenAI is an OK conflict"
+            },
+            {
+              "doc_id": "tec_20260409_04de243c",
+              "score": 0.8354982733726501,
+              "title": "Is Anthropic limiting the release of Mythos to protect the internet \u2014 or Anthropic?"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 6469
+        },
+        "error": null
+      },
+      {
+        "question": "What's happening with enterprise AI deployment according to the news?",
+        "text": "Mirantis and Supermicro are accelerating sovereign AI and hybrid cloud deployments. Lenovo is scaling trusted AI-powered business computing through modular innovation and enterprise platforms. \n\nThe query returned information about companies' innovations and partnerships, but this may not directly answer your question about what's happening with enterprise AI deployment according to the news.",
+        "cited_doc_ids": [
+          "8aec518a-8136-4258-a984-f5faaedefb93",
+          "59492a34-2b43-4bb4-9134-d35e0165d9d1",
+          "ven_20260408_241e797b",
+          "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+          "f8d3913a-62bf-4e2c-936e-70a5a5e1cd3b"
+        ],
+        "approach": "graph_rag",
+        "latency_ms": 13388.142082998456,
+        "trace": {
+          "retrieved_docs": [
+            {
+              "doc_id": "8aec518a-8136-4258-a984-f5faaedefb93",
+              "score": 0.8389370441436768,
+              "title": "Lenovo Scales Trusted AI-Powered Business Computing Through Modular Innovation and Enterprise Platforms"
+            },
+            {
+              "doc_id": "59492a34-2b43-4bb4-9134-d35e0165d9d1",
+              "score": 0.8372893929481506,
+              "title": "Mirantis and Supermicro Accelerate Sovereign AI and Hybrid Cloud Deployments"
+            },
+            {
+              "doc_id": "ven_20260408_241e797b",
+              "score": 0.8340793251991272,
+              "title": "Claude, OpenClaw and the new reality: AI agents are here \u2014 and so is the chaos"
+            },
+            {
+              "doc_id": "ebc7d6c1-12ad-46f0-9e3c-d79f16346cee",
+              "score": 0.8336039185523987,
+              "title": "RELY: New leadership drives AI-powered growth, product innovation, and global expansion"
+            },
+            {
+              "doc_id": "f8d3913a-62bf-4e2c-936e-70a5a5e1cd3b",
+              "score": 0.8332722187042236,
+              "title": "Your Enterprise AI Governance Deserves a \"Participation Trophy\": And That's a Trillion-Dollar Problem"
+            }
+          ],
+          "num_context_blocks": 5,
+          "prompt_length": 4491
+        },
+        "error": null
+      }
+    ]
+  },
+  "scores": [
+    {
+      "question_id": "F1",
+      "category": "factual_lookup",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Founders Fund",
+        "GV",
+        "Benchmark"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 129433.02666700038,
+      "answer_length_chars": 110,
+      "error": null
+    },
+    {
+      "question_id": "F2",
+      "category": "factual_lookup",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.6666666666666666,
+      "keywords_matched": [
+        "Anthropic",
+        "Series C"
+      ],
+      "keywords_missed": [
+        "1.5"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 22328.16174999971,
+      "answer_length_chars": 48,
+      "error": null
+    },
+    {
+      "question_id": "F3",
+      "category": "factual_lookup",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "OpenAI",
+        "50"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 32108.7186249988,
+      "answer_length_chars": 215,
+      "error": null
+    },
+    {
+      "question_id": "F4",
+      "category": "factual_lookup",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Replit"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 15120.171124999615,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "F5",
+      "category": "factual_lookup",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "SGP"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 28979.94304200074,
+      "answer_length_chars": 1008,
+      "error": null
+    },
+    {
+      "question_id": "A1",
+      "category": "aggregation",
+      "approach": "text_to_cypher",
+      "answered": false,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "OpenAI",
+        "50",
+        "Anthropic",
+        "30"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 19559.83104200095,
+      "answer_length_chars": 0,
+      "error": "CypherSyntaxError: {code: Neo.ClientError.Statement.SyntaxError} {message: In a WITH/RETURN with DISTINCT or an aggregation, it is not possible to access variables declared before the WITH/RETURN: f (line 1, column 97 (offset: 96))\n\"MATCH (f:FundingRound)-[:INVESTED_BY]->(i:Investor) RETURN DISTINCT i.name AS investor ORDER BY f.amount_usd DESC LIMIT 3\"\n                                                                                                 ^}"
+    },
+    {
+      "question_id": "A2",
+      "category": "aggregation",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "35"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 6753.945082999053,
+      "answer_length_chars": 41,
+      "error": null
+    },
+    {
+      "question_id": "A3",
+      "category": "aggregation",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Founders Fund"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14766.725000001315,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "A4",
+      "category": "aggregation",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Series A"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 8385.699999998906,
+      "answer_length_chars": 67,
+      "error": null
+    },
+    {
+      "question_id": "A5",
+      "category": "aggregation",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "OpenAI",
+        "Anthropic",
+        "Databricks",
+        "Sierra"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 19437.339166999664,
+      "answer_length_chars": 171,
+      "error": null
+    },
+    {
+      "question_id": "M1",
+      "category": "multi_hop",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Founders Fund"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 23758.19387499905,
+      "answer_length_chars": 128,
+      "error": null
+    },
+    {
+      "question_id": "M2",
+      "category": "multi_hop",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "transformer"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13902.438207998784,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "M3",
+      "category": "multi_hop",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Scale AI"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14766.955125000095,
+      "answer_length_chars": 269,
+      "error": null
+    },
+    {
+      "question_id": "M4",
+      "category": "multi_hop",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Commonwealth Fusion"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 24354.004167000312,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "M5",
+      "category": "multi_hop",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Claude"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13805.828999998994,
+      "answer_length_chars": 240,
+      "error": null
+    },
+    {
+      "question_id": "S1",
+      "category": "semantic",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "agent"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 16280.509500000335,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "S2",
+      "category": "semantic",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "safety"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 5586.253667001074,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "S3",
+      "category": "semantic",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14368.466500000068,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "S4",
+      "category": "semantic",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 7944.689500000095,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "S5",
+      "category": "semantic",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 7290.474875000655,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "N1",
+      "category": "narrative",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Replit"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13719.259374998728,
+      "answer_length_chars": 398,
+      "error": null
+    },
+    {
+      "question_id": "N2",
+      "category": "narrative",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "NVIDIA"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 17831.17758300068,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "N3",
+      "category": "narrative",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "AssemblyAI"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 9591.943958001139,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "N4",
+      "category": "narrative",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Claude",
+        "Anthropic"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 40174.39362500045,
+      "answer_length_chars": 423,
+      "error": null
+    },
+    {
+      "question_id": "N5",
+      "category": "narrative",
+      "approach": "text_to_cypher",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 18719.57941599976,
+      "answer_length_chars": 56,
+      "error": null
+    },
+    {
+      "question_id": "F1",
+      "category": "factual_lookup",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Founders Fund",
+        "GV",
+        "Benchmark"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 20842.394125000283,
+      "answer_length_chars": 154,
+      "error": null
+    },
+    {
+      "question_id": "F2",
+      "category": "factual_lookup",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Anthropic",
+        "1.5",
+        "Series C"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 18086.78037500067,
+      "answer_length_chars": 211,
+      "error": null
+    },
+    {
+      "question_id": "F3",
+      "category": "factual_lookup",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "OpenAI",
+        "50"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 9253.17404099951,
+      "answer_length_chars": 197,
+      "error": null
+    },
+    {
+      "question_id": "F4",
+      "category": "factual_lookup",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Replit"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 4740.378708000208,
+      "answer_length_chars": 44,
+      "error": null
+    },
+    {
+      "question_id": "F5",
+      "category": "factual_lookup",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "SGP"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14476.490041999568,
+      "answer_length_chars": 384,
+      "error": null
+    },
+    {
+      "question_id": "A1",
+      "category": "aggregation",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.5,
+      "keywords_matched": [
+        "OpenAI",
+        "50"
+      ],
+      "keywords_missed": [
+        "Anthropic",
+        "30"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13111.315499998454,
+      "answer_length_chars": 432,
+      "error": null
+    },
+    {
+      "question_id": "A2",
+      "category": "aggregation",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "35"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13550.328541999988,
+      "answer_length_chars": 245,
+      "error": null
+    },
+    {
+      "question_id": "A3",
+      "category": "aggregation",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Founders Fund"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 6772.157332999996,
+      "answer_length_chars": 131,
+      "error": null
+    },
+    {
+      "question_id": "A4",
+      "category": "aggregation",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Series A"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14490.575207999427,
+      "answer_length_chars": 351,
+      "error": null
+    },
+    {
+      "question_id": "A5",
+      "category": "aggregation",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.25,
+      "keywords_matched": [
+        "Anthropic"
+      ],
+      "keywords_missed": [
+        "OpenAI",
+        "Databricks",
+        "Sierra"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14429.93045899857,
+      "answer_length_chars": 376,
+      "error": null
+    },
+    {
+      "question_id": "M1",
+      "category": "multi_hop",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Founders Fund"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 20105.86974999933,
+      "answer_length_chars": 468,
+      "error": null
+    },
+    {
+      "question_id": "M2",
+      "category": "multi_hop",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "transformer"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 15646.822624999913,
+      "answer_length_chars": 404,
+      "error": null
+    },
+    {
+      "question_id": "M3",
+      "category": "multi_hop",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Scale AI"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 14684.314291000192,
+      "answer_length_chars": 413,
+      "error": null
+    },
+    {
+      "question_id": "M4",
+      "category": "multi_hop",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "Commonwealth Fusion"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 6880.8255000003555,
+      "answer_length_chars": 163,
+      "error": null
+    },
+    {
+      "question_id": "M5",
+      "category": "multi_hop",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Claude"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 21029.601000000184,
+      "answer_length_chars": 390,
+      "error": null
+    },
+    {
+      "question_id": "S1",
+      "category": "semantic",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "agent"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 21851.32650000014,
+      "answer_length_chars": 577,
+      "error": null
+    },
+    {
+      "question_id": "S2",
+      "category": "semantic",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 0.0,
+      "keywords_matched": [],
+      "keywords_missed": [
+        "safety"
+      ],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 9503.768750000745,
+      "answer_length_chars": 44,
+      "error": null
+    },
+    {
+      "question_id": "S3",
+      "category": "semantic",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 11007.757208999465,
+      "answer_length_chars": 332,
+      "error": null
+    },
+    {
+      "question_id": "S4",
+      "category": "semantic",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13721.182707999105,
+      "answer_length_chars": 536,
+      "error": null
+    },
+    {
+      "question_id": "S5",
+      "category": "semantic",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 24276.08683299877,
+      "answer_length_chars": 737,
+      "error": null
+    },
+    {
+      "question_id": "N1",
+      "category": "narrative",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Replit"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 16905.279874999906,
+      "answer_length_chars": 610,
+      "error": null
+    },
+    {
+      "question_id": "N2",
+      "category": "narrative",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "NVIDIA"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 11031.537708999167,
+      "answer_length_chars": 494,
+      "error": null
+    },
+    {
+      "question_id": "N3",
+      "category": "narrative",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "AssemblyAI"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 22448.76325000041,
+      "answer_length_chars": 791,
+      "error": null
+    },
+    {
+      "question_id": "N4",
+      "category": "narrative",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [
+        "Claude",
+        "Anthropic"
+      ],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 23091.888041999482,
+      "answer_length_chars": 387,
+      "error": null
+    },
+    {
+      "question_id": "N5",
+      "category": "narrative",
+      "approach": "graph_rag",
+      "answered": true,
+      "keyword_coverage": 1.0,
+      "keywords_matched": [],
+      "keywords_missed": [],
+      "citation_precision": null,
+      "citation_recall": null,
+      "citation_f1": null,
+      "latency_ms": 13388.142082998456,
+      "answer_length_chars": 395,
+      "error": null
+    }
+  ],
+  "aggregates": {
+    "text_to_cypher": {
+      "approach": "text_to_cypher",
+      "n_questions": 25,
+      "n_answered": 24,
+      "answered_rate": 0.96,
+      "mean_keyword_coverage": 0.6266666666666666,
+      "mean_latency_ms": 21558.709194999974,
+      "median_latency_ms": 15120.171124999615,
+      "mean_answer_length": 151.6,
+      "per_category": {
+        "aggregation": {
+          "n": 5,
+          "n_answered": 4,
+          "answered_rate": 0.8,
+          "mean_keyword_coverage": 0.6,
+          "mean_latency_ms": 13780.708058399978
+        },
+        "factual_lookup": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.7333333333333333,
+          "mean_latency_ms": 45594.00424179985
+        },
+        "multi_hop": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.6,
+          "mean_latency_ms": 18117.484074999447
+        },
+        "narrative": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.6,
+          "mean_latency_ms": 20007.27079140015
+        },
+        "semantic": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.6,
+          "mean_latency_ms": 10294.078808400445
+        }
+      }
+    },
+    "graph_rag": {
+      "approach": "graph_rag",
+      "n_questions": 25,
+      "n_answered": 25,
+      "answered_rate": 1.0,
+      "mean_keyword_coverage": 0.67,
+      "mean_latency_ms": 15013.067618319692,
+      "median_latency_ms": 14476.490041999568,
+      "mean_answer_length": 370.64,
+      "per_category": {
+        "aggregation": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.35,
+          "mean_latency_ms": 12470.861408399287
+        },
+        "factual_lookup": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.8,
+          "mean_latency_ms": 13479.843458200048
+        },
+        "multi_hop": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.4,
+          "mean_latency_ms": 15669.486633199995
+        },
+        "narrative": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 1.0,
+          "mean_latency_ms": 17373.122191799484
+        },
+        "semantic": {
+          "n": 5,
+          "n_answered": 5,
+          "answered_rate": 1.0,
+          "mean_keyword_coverage": 0.8,
+          "mean_latency_ms": 16072.024399999646
+        }
+      }
+    }
+  }
+}

@@ -4,17 +4,17 @@
 Arizona State University — CSE 573 Semantic Web Mining
 
 ## Project Overview
-TrendScout AI 2.0 is a semantic web mining pipeline that monitors the AI startup ecosystem. It combines multi-source web mining, classical IR baselines, LLM-powered Knowledge Graph construction (Neo4j), and a planned KG-RAG conversational interface.
+TrendScout AI 2.0 is a semantic web mining pipeline that monitors the AI startup ecosystem. It combines multi-source web mining, classical IR baselines, LLM-powered Knowledge Graph construction (Neo4j), and a dual KG-RAG conversational interface that answers natural-language questions about AI startups, funding rounds, and technology trends.
 
-The system runs **fully locally** — text extraction uses a local Ollama model (`llama3.1:8b`), the graph lives in a local Dockerized Neo4j, and no external APIs are required for any extraction step.
+The system runs **fully locally** — text extraction and question-answering use a local Ollama model (`llama3.1:8b`), document embeddings use `BAAI/bge-base-en-v1.5` via sentence-transformers, the graph and vector index live in a local Dockerized Neo4j, and no external APIs are required.
 
 ## Phases
 | Phase | Weeks | Focus | Status |
 |-------|-------|-------|--------|
 | 1 | 1-2 | Data Collection + Classical Baselines | ✅ Complete |
 | 2 | 3-4 | LLM-based Knowledge Graph (Neo4j) | ✅ Complete |
-| 3 | 5-6 | KG-RAG Integration + Natural-language Q&A | 🔜 Planned |
-| 4 | 7-8 | Evaluation + Report + Demo | 🔜 Planned |
+| 3 | 5-6 | KG-RAG Integration + Natural-language Q&A | ✅ Complete |
+| 4 | 7-8 | Evaluation + Report + Demo | ✅ Complete |
 
 ---
 
@@ -56,10 +56,12 @@ sed -i '' 's/your_password_here/trendscout123/' .env       # macOS
 
 Verify everything is wired up:
 ```bash
-python -m pytest -q                                         # should print "92 passed"
+python -m pytest -q                                         # should print "189 passed"
 docker ps | grep trendscout-neo4j                           # container should be Up
 ollama list | grep llama3.1                                 # model should be present
 ```
+
+> **Note on Phase 3 dependencies:** `sentence-transformers` (which pulls in PyTorch) is required for the GraphRAG embedding pipeline. It's included in `requirements.txt`. On first run of `build_vector_index.py`, the `BAAI/bge-base-en-v1.5` model (~400 MB) is downloaded and cached in `~/.cache/huggingface`. PyTorch auto-detects Apple Silicon MPS on macOS for GPU-accelerated embedding.
 
 ---
 
@@ -191,12 +193,155 @@ open http://localhost:7474                  # login: neo4j / trendscout123
 | AssemblyAI (job postings) | 7 | 2% |
 | **Total** | **295** | |
 
+---
+
+## Phase 3 — KG-RAG Question-Answering
+
+Phase 3 adds a natural-language Q&A interface over the Phase 2 knowledge graph. Two approaches are implemented and benchmarked side-by-side:
+
+**Approach A — Text-to-Cypher (classical baseline).** An LLM translates the user's question into a Cypher query, which is validated by a read-only safety layer, executed against Neo4j, and the results are formatted into an English answer with source citations. Best for structured factual lookups ("Who invested in Replit?", "Which companies use RAG?").
+
+**Approach B — GraphRAG (main contribution).** The user's question is embedded using `BAAI/bge-base-en-v1.5`, the top-5 most similar documents are retrieved from a Neo4j native vector index (768-dim, cosine similarity), each document's KG neighborhood is expanded (startups, funding rounds, investors, products, technologies), and the combined textual + structured context is fed to the LLM for answer generation. Handles both structured and semantic queries ("What are startups saying about agent frameworks?").
+
+Both approaches implement the same `BaseQASystem` protocol and return standardized `Answer` objects, enabling head-to-head benchmarking in Phase 4.
+
+### One-time setup: build the vector index
+
+```bash
+# Downloads bge-base-en-v1.5 (~400 MB) on first run, then cached.
+# Embeds 295 documents and stores vectors on Neo4j Document nodes.
+python scripts/build_vector_index.py --wipe
+```
+
+Typical runtime: ~30-60 seconds on Apple Silicon (MPS-accelerated).
+
+### Run the Q&A chat
+
+```bash
+# Interactive REPL — both approaches side-by-side (default)
+python scripts/run_qa_chat.py
+
+# Single approach
+python scripts/run_qa_chat.py --approach A
+python scripts/run_qa_chat.py --approach B
+
+# One-shot mode
+python scripts/run_qa_chat.py --query "Who invested in Replit?"
+python scripts/run_qa_chat.py --approach B --query "What are the biggest funding rounds?"
+```
+
+### Example output
+
+```
+> Who invested in Replit?
+
+  [TEXT TO CYPHER]
+  Founders Fund, Tiger Global, Fidelity Management & Research Company
+  LLC, Benchmark, and GV invested in Replit.
+  (18761ms)
+
+  [GRAPH RAG]
+  Benchmark, Founders Fund, Tiger Global, Fidelity Management & Research
+  Company LLC, GV.
+  (15384ms)
+  Sources: 5 document(s)
+```
+
+### Phase 3 architecture
+
+```
+User question
+    │
+    ├── Approach A: Text-to-Cypher
+    │   ├── CypherGenerator (LLM + few-shot prompt + SCHEMA_PROMPT)
+    │   ├── SafeCypherExecutor (read-only validator → Neo4j)
+    │   ├── retry once on CypherSyntaxError (feed error back to LLM)
+    │   └── AnswerFormatter (LLM + ANSWER_STYLE_GUIDE)
+    │
+    └── Approach B: GraphRAG
+        ├── Embedder (bge-base-en-v1.5, 768-dim)
+        ├── VectorStore.query (Neo4j native vector index, top-5)
+        ├── Graph expansion (MENTIONS → Startup → FundingRound/Investor/Product/Tech)
+        └── LLM answer generation (structured context + style guide)
+```
+
+### Safety layer
+
+All LLM-generated Cypher passes through `cypher_safety.validate_read_only()` before execution. Two-layer defense: (1) first-clause whitelist (`MATCH`, `RETURN`, `WITH`, `UNWIND`, `OPTIONAL`), (2) forbidden-keyword scan (16 keywords: `CREATE`, `MERGE`, `DELETE`, `SET`, `DROP`, `CALL`, etc.). String literals and comments are stripped before scanning to avoid false positives. Any destructive query is rejected before it reaches Neo4j.
+
+### Known tradeoffs between approaches
+
+| Query type | Approach A | Approach B |
+|---|---|---|
+| Structured lookup ("Who invested in X?") | ✅ Precise Cypher traversal | ✅ Works via graph expansion |
+| Aggregation ("Top 3 funding rounds") | ❌ 8B model struggles with Cypher aggregation | ⚠️ Partial — finds relevant docs but ranking is approximate |
+| Multi-hop ("Investors who co-invest in LLM companies") | ✅ Natural fit for Cypher | ✅ Graph expansion covers this |
+| Semantic ("What are startups saying about agents?") | ❌ No text retrieval capability | ✅ Vector search finds relevant articles |
+| Latency (typical) | 8-20s (2 LLM calls) | 15-20s (1 embedding + 1 LLM call + graph queries) |
+
+---
+
+## Phase 4 — Comparative Evaluation
+
+Phase 4 benchmarks Approach A and Approach B head-to-head on a hand-curated set of 25 questions across five categories (factual lookup, aggregation, multi-hop, semantic, narrative). Both approaches implement the same `BaseQASystem` protocol so the same harness can score them uniformly.
+
+**Full report:** [`reports/phase4_findings.md`](reports/phase4_findings.md) — methodology, headline numbers, per-category breakdown, qualitative analysis of three illustrative failures, and conclusions. Suitable for inclusion in the project writeup.
+
+### Run the benchmark
+
+```bash
+# Full benchmark (25 questions × both approaches, ~15-20 minutes on llama3.1:8b)
+python scripts/run_benchmark.py 2>&1 | tee evaluation/benchmark_run.log
+
+# Generate the report
+python scripts/analyze_benchmark.py --output reports/phase4_findings.md
+python scripts/analyze_benchmark.py --detail --output reports/phase4_findings_detailed.md
+
+# Faster variants for iteration
+python scripts/run_benchmark.py --limit 5             # first 5 questions
+python scripts/run_benchmark.py --category aggregation # one category only
+python scripts/run_benchmark.py --approach A          # one approach only
+```
+
+### Headline result (15.2 minutes wall-clock, 50 LLM-driven inferences)
+
+| Metric | Approach A | Approach B |
+|---|---|---|
+| Answered rate | 96% | 100% |
+| Mean keyword coverage | 63% | 67% |
+| Mean latency | 21.6s | 15.0s |
+| Median latency | 15.1s | 14.5s |
+
+The headline near-tie disguises strong category specialization. Per-category margins ≥20% (full table in the report):
+
+| Category | Winner | Margin |
+|---|---|---|
+| aggregation | A | +25% |
+| multi_hop | A | +20% |
+| semantic | B | +20% |
+| narrative | B | +40% |
+
+**Bottom line:** the two paradigms are specialized rather than interchangeable. A wins on questions with structured answers (aggregations, multi-hop joins). B wins on questions requiring document understanding (semantic search, narrative synthesis). They tie on factual lookups. A composite system that routes by question type would likely outperform either alone.
+
+### Question set
+
+The 25 questions live in [`evaluation/eval_questions.yaml`](evaluation/eval_questions.yaml). Each carries expected keywords for automated scoring and notes describing what it tests. Examples:
+
+- *factual_lookup:* "Who invested in Replit?" → expects "Founders Fund", "GV", "Benchmark"
+- *aggregation:* "What are the 3 biggest funding rounds?" → expects "OpenAI", "50", "Anthropic", "30"
+- *narrative:* "Tell me about NVIDIA's investments and partnerships in AI." → expects "NVIDIA"
+
+---
+
 ### Known limitations (honest)
 1. **No `MAKES` vs `USES` distinction.** The LLM extracts both "Anthropic makes Claude" and "Replit uses Claude" under the same `ANNOUNCED` edge. Future work: split into `MAKES_PRODUCT` vs `USES_PRODUCT`.
 2. **Surface-form variants persist.** ~5 variants of "Scale Generative AI Platform" (SGP, Scale GP, Scale Generative Platform, etc.) live as distinct Product nodes. Future work: extend the normalizer alias table.
 3. **Funding precision ~80%** on the current corpus. The bulk of the news content is Google News headline-and-preview snippets, which give the LLM thin context. The TechCrunch and VentureBeat additions help meaningfully but the corpus still contains ~77 preview-only Google News docs.
 4. **Corpus skew.** The corpus is 54% Scale AI job postings (158/295 docs). Pass 2 product extraction is dominated by Scale AI's internal product names. The TechCrunch and VentureBeat additions reduced this from the original 65% but a fully rebalanced corpus would require either YC/HackerNews scraping (currently broken — YC's directory is a JS-rendered SPA) or additional news sources.
 5. **YC scraper not functional.** Y Combinator's company directory is a Next.js SPA that renders the company list client-side; the current `BeautifulSoup`-based scraper sees only the empty React shell. Fixing this would require either Playwright (already in `requirements.txt`) or hitting YC's underlying Algolia API directly. Listed in `src/scraper/yc_scraper.py` as future work.
+6. **Text-to-Cypher struggles with aggregation queries.** The local llama3.1:8b model frequently generates syntactically invalid Cypher for queries involving `ORDER BY ... LIMIT` with `DISTINCT` or `count()`. A larger model (e.g. 70B) or chain-of-thought prompting would likely fix this. The retry mechanism catches the syntax error gracefully but cannot always self-correct.
+7. **GraphRAG retrieval doesn't capture ranking/superlative semantics.** "What are the *biggest* funding rounds?" retrieves articles *about* funding but not specifically the *largest* ones, because cosine similarity doesn't encode ordinal concepts. A hybrid approach combining vector search with a structured Cypher pre-filter (`WHERE r.amount_usd > threshold`) would address this.
+8. **Document text not stored in Neo4j.** The vector index embeds `title + first 2000 chars`, but the full `cleaned_text` is only in `corpus.jsonl`. GraphRAG's context blocks rely on graph-expanded structured facts rather than full article text, which limits its ability to answer questions requiring deep reading of article content.
 
 ---
 
@@ -220,19 +365,40 @@ trendscout-ai/
 │   └── settings.py                 # env-driven configuration
 ├── data/
 │   ├── master_corpus.json          # committed sample corpus (414 docs)
-│   └── processed/corpus.jsonl      # Phase 1 output, Phase 2 input
+│   └── processed/corpus.jsonl      # Phase 1 output, Phase 2+3 input
+├── backups/
+│   └── kg_v3_backup.cypher         # canonical Phase 2 graph snapshot
 ├── src/
 │   ├── corpus.py                   # corpus I/O + stats
 │   ├── preprocessing/              # Phase 1: cleaner, deduplicator
 │   ├── retrieval/                  # Phase 1: BM25, TF-IDF
 │   ├── scraper/                    # Phase 1: source scrapers
 │   ├── baseline/                   # Phase 1: LDA topic model
-│   └── kg/                         # Phase 2: KG construction
-│       ├── schema.py               # node/edge schema + constraints
-│       ├── neo4j_client.py         # driver wrapper with retries
-│       ├── normalizer.py           # name canonicalization + aliases
-│       ├── extractor.py            # LLM extractors (funding, products)
-│       └── ingester.py             # Cypher MERGE-based writers
+│   ├── kg/                         # Phase 2: KG construction
+│   │   ├── schema.py               # node/edge schema + constraints
+│   │   ├── neo4j_client.py         # driver wrapper with retries
+│   │   ├── normalizer.py           # name canonicalization + aliases
+│   │   ├── extractor.py            # LLM extractors (funding, products)
+│   │   └── ingester.py             # Cypher MERGE-based writers
+│   └── rag/                        # Phase 3: KG-RAG Q&A
+│       ├── common.py               # Answer dataclass, BaseQASystem protocol
+│       ├── cypher_safety.py        # read-only Cypher validator
+│       ├── cypher_executor.py      # safe executor wrapping Neo4jClient
+│       ├── cypher_generator.py     # LLM text-to-Cypher with few-shot
+│       ├── answer_formatter.py     # LLM result-to-English formatter
+│       ├── text_to_cypher.py       # Approach A pipeline
+│       ├── embedder.py             # bge-base-en-v1.5 wrapper
+│       ├── vector_store.py         # Neo4j native vector index ops
+│       └── graph_rag.py            # Approach B pipeline
+│   └── evaluation/                 # Phase 4: benchmark + scoring
+│       ├── __init__.py
+│       └── scorer.py               # keyword/citation scoring + aggregates
+├── evaluation/                     # Phase 4 question set + benchmark outputs
+│   ├── eval_questions.yaml         # 25 questions × 5 categories
+│   └── results_*.json              # benchmark output (timestamped)
+├── reports/                        # Phase 4 final writeup
+│   ├── phase4_findings.md          # report-ready Markdown
+│   └── phase4_findings_detailed.md # full per-question answers
 ├── scripts/
 │   ├── run_scraper.py              # Phase 1
 │   ├── run_preprocessing.py        # Phase 1
@@ -241,17 +407,26 @@ trendscout-ai/
 │   ├── run_kg_init.py              # Phase 2 — schema setup
 │   ├── run_kg_build.py             # Phase 2 — extraction passes
 │   ├── clean_kg.py                 # Phase 2 — surgical cleanup
-│   └── run_kg_queries.py           # Phase 2 — demo queries
+│   ├── run_kg_queries.py           # Phase 2 — demo queries
+│   ├── build_vector_index.py       # Phase 3 — embed docs into Neo4j
+│   ├── run_qa_chat.py              # Phase 3 — interactive Q&A REPL
+│   ├── run_benchmark.py            # Phase 4 — A vs B benchmark
+│   └── analyze_benchmark.py        # Phase 4 — pretty-print results
 └── tests/
     ├── test_scraper.py
     ├── test_preprocessing.py
     ├── test_retrieval.py
-    └── test_kg_extractor.py
+    ├── test_kg_extractor.py
+    ├── test_rag_step1.py           # safety + common types
+    ├── test_rag_step2.py           # executor + generator + formatter
+    ├── test_rag_step3.py           # embedder + vector store
+    ├── test_rag_step4.py           # GraphRAG pipeline
+    └── test_evaluation.py          # Phase 4 scorer
 ```
 
 ## Tests
 ```bash
-python -m pytest -q             # 92 tests, all passing
+python -m pytest -q             # 189 tests, all passing
 ```
 
 ## Team
