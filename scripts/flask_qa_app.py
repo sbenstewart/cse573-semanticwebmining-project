@@ -386,7 +386,6 @@ const SUGGESTED = [
   "What funding rounds does Anthropic have?",
   "Which technologies appear most?",
   "Which startups raised Seed rounds?",
-  "What products did Anthropic announce?",
   "Which investors back LLM startups?",
 ];
 
