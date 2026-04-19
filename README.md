@@ -230,7 +230,7 @@ python scripts/run_qa_chat.py --query "Who invested in Replit?"
 python scripts/run_qa_chat.py --approach B --query "What are the biggest funding rounds?"
 ```
 
-### Run web interfaces (Streamlit / Flask)
+### Run web interfaces (Flask)
 
 ```bash
 
