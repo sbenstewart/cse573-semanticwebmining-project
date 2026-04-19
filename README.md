@@ -230,6 +230,15 @@ python scripts/run_qa_chat.py --query "Who invested in Replit?"
 python scripts/run_qa_chat.py --approach B --query "What are the biggest funding rounds?"
 ```
 
+### Run web interfaces (Flask)
+
+```bash
+
+# Flask app (JSON API + minimal browser UI)
+python scripts/flask_qa_app.py
+# open http://localhost:8502
+```
+
 ### Example output
 
 ```

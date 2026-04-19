@@ -208,10 +208,16 @@ class GraphRAG:
             )
 
         trace["retrieved_docs"] = [
-            {"doc_id": r.get("doc_id"), "score": r.get("score"),
-             "title": r.get("title")}
-            for r in retrieved
-        ]
+        {
+            "doc_id":         r.get("doc_id"),
+            "score":          r.get("score"),
+            "title":          r.get("title"),
+            "url":            r.get("url"),            # ← this is what makes links work
+            "publisher":      r.get("publisher"),
+            "published_date": r.get("published_date"),
+        }
+        for r in retrieved
+]
 
         if not retrieved:
             elapsed = (time.perf_counter() - start) * 1000
